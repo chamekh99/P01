@@ -264,11 +264,19 @@ body.concours{--ln:var(--t2);--ln-soft:var(--t2s);--ln-line:var(--t2l)}
 .rc.show{display:block;animation:rcIn .25s ease}
 @keyframes rcIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .rc-card{background:var(--panel);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 12px 44px -20px rgba(16,42,35,.28)}
-.rc-card::before{content:"";display:block;height:4px;background:linear-gradient(90deg,#ffcc00 0 33.33%,#00b775 33.33% 66.66%,#fb275d 66.66% 100%)}
 .rc-st-pass .rc-card{border-color:var(--green-line);box-shadow:0 14px 54px -18px rgba(0,183,117,.5)}
 .rc-celebrate{display:none}
 .rc-st-pass .rc-celebrate{display:flex;align-items:center;justify-content:center;gap:9px;padding:14px 18px;font-weight:800;font-size:1.06rem;color:#fff;background:linear-gradient(105deg,#00b775,#0f9d6e);letter-spacing:.02em;animation:celebPop .45s cubic-bezier(.2,1.3,.4,1)}
 .rc-celebrate .ce-spark{font-size:1.15rem;animation:ceFloat 1.6s ease-in-out infinite}
+.rc-emblem{width:74px;height:74px;border-radius:50%;display:grid;place-items:center;margin:2px auto}
+.rc-emblem svg{width:40px;height:40px}
+.rc-st-pass .rc-emblem{background:linear-gradient(145deg,#00b775,#0f9d6e);color:#fff;box-shadow:0 10px 24px -6px rgba(0,183,117,.6);animation:emblemPop .5s cubic-bezier(.2,1.4,.4,1)}
+.rc-st-fail .rc-emblem{background:#fdecec;color:#dc2626;border:2px solid #f6c9c9}
+.rc-st-session .rc-emblem{background:#fef3e2;color:#b45309;border:2px solid #f6dcb0}
+.rc-st-absent .rc-emblem,.rc-st-cancel .rc-emblem{background:var(--panel-2);color:var(--ink-3);border:2px solid var(--line-2)}
+[data-theme="dark"] .rc-st-fail .rc-emblem{background:#3a1c1c;color:#f87171;border-color:#5e2a2a}
+[data-theme="dark"] .rc-st-session .rc-emblem{background:#3a2c12;color:#f59e0b;border-color:#5e4719}
+@keyframes emblemPop{from{transform:scale(.55);opacity:0}to{transform:scale(1);opacity:1}}
 @keyframes celebPop{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
 @keyframes ceFloat{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-3px) rotate(6deg)}}
 .rc-head{padding:24px 24px 20px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:11px;border-bottom:1px solid var(--line)}
@@ -296,7 +304,7 @@ body.concours{--ln:var(--t2);--ln-soft:var(--t2s);--ln-line:var(--t2l)}
 [data-theme="dark"] .rc-st-session .rc-row.moy .rc-v{color:#f59e0b}
 [data-theme="dark"] .rc-st-fail .rc-row.moy .rc-v{color:#f87171}
 .rc-row.moy .rc-v small{font-size:.6rem;font-weight:600;color:var(--ink-3)}
-.rc-foot{padding:13px 24px;background:var(--panel-2);font-size:.82rem;color:var(--ink-3);text-align:center}
+.rc-foot{padding:16px 24px;background:var(--panel-2);display:flex;align-items:center;justify-content:center}
 .rc-foot b{color:var(--ink-2);font-weight:700;letter-spacing:.03em}
 
 /* icons in rows */
@@ -323,14 +331,10 @@ body.concours{--ln:var(--t2);--ln-soft:var(--t2s);--ln-line:var(--t2l)}
 .share-btn .sb-spin{width:17px;height:17px;border:2.5px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:rcspin .7s linear infinite}
 
 /* watermark brand (only visible in saved image) */
-.rc-brand{display:none;align-items:center;justify-content:center;gap:9px;padding:16px 24px;background:linear-gradient(135deg,var(--green-deep),var(--t2));color:#fff}
-.rc-card.snapshot .rc-brand{display:flex}
-.rc-card.snapshot .rc-share-skip{display:none}
-.rc-brand-logo{width:32px;height:32px;border-radius:9px;background:rgba(255,255,255,.2);display:grid;place-items:center;flex-shrink:0}
-.rc-brand-logo svg{width:18px;height:18px}
-.rc-brand-txt{display:flex;flex-direction:column;line-height:1.2;text-align:right}
-.rc-brand-name{font-weight:800;font-size:1rem}
-.rc-brand-sub{font-size:.7rem;opacity:.85;font-weight:400}
+.rc-foot-img{height:26px;width:auto;display:block}
+.rc-foot-dark{display:none}
+[data-theme="dark"] .rc-foot-light{display:none}
+[data-theme="dark"] .rc-foot-dark{display:block}
 
 /* toast */
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--bg);font-size:.88rem;font-weight:600;padding:12px 22px;border-radius:12px;opacity:0;transition:.3s;z-index:200;pointer-events:none;box-shadow:0 12px 30px -10px rgba(0,0,0,.4)}
@@ -528,6 +532,16 @@ const ROW_ICONS={
   moy:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 2v4M8 2v4M3 10h18"/><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>'
 };
 
+const EMBLEM={
+  pass:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>',
+  fail:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><path d="M9 9h.01M15 9h.01"/></svg>',
+  session:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+  absent:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg>',
+  cancel:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg>'
+};
+const RC_LOGO_LIGHT='data:image/svg+xml,%3Csvg%20id%3D%22Layer_2%22%20data-name%3D%22Layer%202%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20331.5%2037.71%22%3E%20%3Cg%20id%3D%22Layer_1-2%22%20data-name%3D%22Layer%201%22%3E%20%3Cg%3E%20%3Cpath%20d%3D%22M66.73%2C37.25c-2.37.13-4.66.12-7.09.13l-.1-16.25c-.02-2.91-2.63-4.76-5.23-4.86-3.66-.14-6.05%2C2.5-6.07%2C6.12l-.08%2C14.98h-6.88s0-26.83%2C0-26.83h6.84s.11%2C3.77.11%2C3.77c2.84-4.67%2C9.61-5.09%2C13.66-2.61%2C1.34.82%2C2.27%2C2.05%2C3.38%2C3.41%2C1.51-3.09%2C4.3-4.47%2C7.56-4.85%2C5.85-.69%2C11.27%2C3.31%2C11.56%2C9.45l.13%2C17.64-7.06.02-.16-16.67c-.03-3.05-3.08-4.63-5.67-4.44s-4.4%2C1.76-4.9%2C4.42v16.57Z%22%2F%3E%20%3Cpath%20d%3D%22M109.49%2C37.37l-.17-4.24c-1.39%2C1.7-2.42%2C3.18-4.43%2C3.87-5.41%2C1.86-11.46-.08-14.79-4.66-2.02-2.78-2.86-5.74-2.68-9.15.45-8.43%2C8.05-14.51%2C16.34-12.63%2C2.31.52%2C3.87%2C1.89%2C5.35%2C3.95l.08-3.98h6.82s0%2C26.83%2C0%2C26.83h-6.53ZM109.38%2C23.96c0-4.15-3.36-7.51-7.51-7.51s-7.51%2C3.36-7.51%2C7.51%2C3.36%2C7.51%2C7.51%2C7.51%2C7.51-3.36%2C7.51-7.51Z%22%2F%3E%20%3Cpath%20fill%3D%22%230f9d6e%22%20d%3D%22M273.03%2C28.01l4.93%2C3.43c.28.19.31.97.08%2C1.2l-2.01%2C1.98c-4.2%2C3.16-9.76%2C3.91-14.68%2C2.18-5.75-2.02-8.98-7.49-8.7-13.6.34-7.42%2C6.53-13.03%2C13.94-12.99%2C6.8.03%2C12.5%2C4.81%2C13.48%2C11.53.22%2C1.53.27%2C2.86-.18%2C4.44h-19.95c.18%2C1.47.98%2C2.76%2C2.23%2C3.73%2C3.24%2C2.52%2C8.15%2C1.84%2C10.85-1.9ZM273.12%2C21.07c-1.2-3.75-4.84-5.4-8.4-4.6-2.35.53-4.32%2C2.11-4.8%2C4.62l13.2-.02Z%22%2F%3E%20%3Cpath%20fill%3D%22%230f9d6e%22%20d%3D%22M221.67%2C37.69c-5.01-.01-9.31-1.91-12.15-5.92-4.1-5.8-3.1-13.43%2C2.34-18.14%2C3.11-2.69%2C7.11-3.72%2C11.28-3.31%2C6.78.67%2C12.07%2C5.9%2C12.55%2C12.78.56%2C8.02-5.99%2C14.61-14.02%2C14.59ZM228.82%2C23.98c0-4.11-3.33-7.44-7.44-7.44s-7.44%2C3.33-7.44%2C7.44%2C3.33%2C7.44%2C7.44%2C7.44%2C7.44-3.33%2C7.44-7.44Z%22%2F%3E%20%3Cpath%20d%3D%22M137.99%2C10.55h7.07s.02%2C26.78.02%2C26.78l-6.83.05-.07-3.8c-1.68%2C2.6-3.96%2C4.07-7.01%2C4.06-5.41.49-9.9-3.03-10.98-8.43l-.02-18.67h6.88s.05%2C16.22.05%2C16.22c0%2C1.44.85%2C3.14%2C1.95%2C3.88%2C2.47%2C1.68%2C5.96%2C1.24%2C7.67-1.06%2C1.1-1.47%2C1.29-3.18%2C1.29-4.91l-.02-14.14Z%22%2F%3E%20%3Cpath%20fill%3D%22%230f9d6e%22%20d%3D%22M188.16%2C17.36c-1.38%2C1.05-2.27%2C2.59-2.28%2C4.29l-.07%2C15.73h-6.86s0-26.83%2C0-26.83h6.82s.05%2C3.9.05%2C3.9c1.4-2.49%2C3.63-3.77%2C6.35-4.11%2C3.6-.45%2C7.31.56%2C9.61%2C3.49%2C1.12%2C1.43%2C2.25%2C3.37%2C2.26%2C5.28l.06%2C18.27h-6.82s.01-14.15.01-14.15c0-1.91-.3-4-1.72-5.41-1.9-1.89-5.25-2.09-7.41-.45Z%22%2F%3E%20%3Cpath%20fill%3D%22%230f9d6e%22%20d%3D%22M251.46%2C31.07l.05%2C6.32-5.83-.15c-3.07-.08-6.06-2.52-6.08-5.79l-.1-14.82-3.94-.02v-6.07s3.95%2C0%2C3.95%2C0v-5.41s6.83-.72%2C6.83-.72v6.14s5.59-.01%2C5.59-.01v6.07s-5.59.01-5.59.01l.02%2C12.64c0%2C1.25%2C1.11%2C1.8%2C2.13%2C1.8h2.98Z%22%2F%3E%20%3Cpath%20d%3D%22M156.09%2C37.36l-6.86.02V10.54s6.57%2C0%2C6.57%2C0c.02%2C1.5-.08%2C2.73.27%2C4.58%2C1.4-3.23%2C4.37-5.07%2C8.06-4.83v6.62c-2.04-.06-3.97.23-5.56%2C1.52-1.24%2C1.01-2.4%2C2.67-2.41%2C4.43l-.07%2C14.5Z%22%2F%3E%20%3Crect%20x%3D%22166.52%22%20y%3D%2210.53%22%20width%3D%226.88%22%20height%3D%2226.85%22%2F%3E%20%3Cpath%20d%3D%22M324.18%2C37.56h-2.91s-.04-6.66-.04-6.66c0-1.19-1.08-1.96-2.15-1.99-1.21-.04-2.21.67-2.39%2C1.89l-.13.86v5.91s-2.83%2C0-2.83%2C0v-11.02s2.81%2C0%2C2.81%2C0l.04%2C1.58c.46-.61.72-.99%2C1.31-1.27%2C1.35-.63%2C2.98-.62%2C4.29.16.56.33.94.85%2C1.39%2C1.4.61-1.24%2C1.71-1.8%2C3.02-1.98%2C2.37-.33%2C4.67%2C1.25%2C4.83%2C3.78l.07%2C7.34h-2.9s-.07-6.83-.07-6.83c-.01-1.23-1.16-1.87-2.25-1.83-1.03.04-2.05.68-2.06%2C1.82l-.04%2C6.84Z%22%2F%3E%20%3Cpath%20d%3D%22M311.04%2C28.31c1.89%2C2.08%2C1.92%2C5.39%2C0%2C7.48-2.33%2C2.55-6.59%2C2.57-8.92-.01-1.94-2.15-1.9-5.37.06-7.51%2C2.31-2.52%2C6.56-2.49%2C8.85.04ZM309.64%2C32.06c0-1.69-1.37-3.05-3.05-3.05s-3.05%2C1.37-3.05%2C3.05%2C1.37%2C3.05%2C3.05%2C3.05%2C3.05-1.37%2C3.05-3.05Z%22%2F%3E%20%3Cpath%20d%3D%22M298.64%2C33.87l2.05%2C1.7c-.92%2C1.24-2.25%2C1.86-3.72%2C2.07-2.47.35-4.9-.74-6.07-2.99-.89-1.7-.83-3.8.14-5.45l.69-.93c2.05-2.14%2C5.42-2.45%2C7.89-.87.45.29.74.61%2C1.05%2C1.07l-2.17%2C1.75c-.76-.98-1.81-1.37-2.99-1.15-1.3.24-2.24%2C1.39-2.38%2C2.59-.17%2C1.4.65%2C2.68%2C1.79%2C3.16%2C1.39.59%2C2.78.23%2C3.72-.96Z%22%2F%3E%20%3Cpath%20d%3D%22M285.23%2C37.66c-.97-.18-1.58-.97-1.55-1.84.03-.96.7-1.66%2C1.69-1.78%2C1.14-.14%2C2.15.75%2C2.11%2C1.87s-1.03%2C1.98-2.25%2C1.75Z%22%2F%3E%20%3Cpath%20d%3D%22M172.66%2C7.44c-1.75%2C1.29-3.95%2C1.1-5.37-.18-1.51-1.34-2.01-3.56-.77-5.3%2C1.09-1.53%2C2.62-2.26%2C4.48-1.86%2C1.45.31%2C2.98%2C1.57%2C3.14%2C3.3.14%2C1.54-.19%2C3.09-1.47%2C4.04Z%22%2F%3E%20%3Crect%20fill%3D%22%23fc0%22%20y%3D%2215.11%22%20width%3D%2229.76%22%20height%3D%2210.79%22%2F%3E%20%3Crect%20fill%3D%22%23fb275d%22%20x%3D%2210.89%22%20y%3D%2230.46%22%20width%3D%2218.87%22%20height%3D%226.93%22%2F%3E%20%3Ccircle%20fill%3D%22%2300b775%22%20cx%3D%2224.48%22%20cy%3D%225.27%22%20r%3D%225.27%22%2F%3E%20%3C%2Fg%3E%20%3C%2Fg%3E%20%3C%2Fsvg%3E';
+const RC_LOGO_DARK='data:image/svg+xml,%3Csvg%20id%3D%22Layer_2%22%20data-name%3D%22Layer%202%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%201215.8%20138.31%22%3E%20%3Cg%20id%3D%22Layer_1-2%22%20data-name%3D%22Layer%201%22%3E%20%3Cg%3E%20%3Cpath%20fill%3D%22%23fff%22%20d%3D%22M244.75%2C136.63c-8.69.48-17.1.45-26%2C.47l-.38-59.61c-.07-10.67-9.63-17.44-19.19-17.82-13.43-.53-22.17%2C9.17-22.25%2C22.43l-.3%2C54.96h-25.22s0-98.4%2C0-98.4l25.1.02.39%2C13.82c10.43-17.14%2C35.23-18.68%2C50.1-9.55%2C4.91%2C3.01%2C8.34%2C7.53%2C12.39%2C12.52%2C5.55-11.32%2C15.77-16.39%2C27.74-17.8%2C21.45-2.53%2C41.33%2C12.12%2C42.4%2C34.66l.48%2C64.7-25.88.06-.58-61.13c-.11-11.17-11.28-16.96-20.81-16.3-9.88.69-16.13%2C6.46-17.97%2C16.2l-.03%2C60.76Z%22%2F%3E%20%3Cpath%20fill%3D%22%23fff%22%20d%3D%22M401.58%2C137.07l-.61-15.55c-5.1%2C6.24-8.88%2C11.67-16.24%2C14.2-19.84%2C6.81-42.04-.3-54.23-17.08-7.39-10.18-10.51-21.04-9.83-33.55%2C1.67-30.92%2C29.52-53.22%2C59.92-46.31%2C8.46%2C1.92%2C14.2%2C6.94%2C19.63%2C14.48l.28-14.6%2C25.02.03v98.37s-23.94%2C0-23.94%2C0ZM401.17%2C87.89c0-15.21-12.33-27.54-27.54-27.54s-27.54%2C12.33-27.54%2C27.54%2C12.33%2C27.54%2C27.54%2C27.54%2C27.54-12.33%2C27.54-27.54Z%22%2F%3E%20%3Cpath%20fill%3D%22%2300b775%22%20d%3D%22M1001.36%2C102.73l18.08%2C12.58c1.02.71%2C1.15%2C3.56.29%2C4.41l-7.37%2C7.27c-15.4%2C11.59-35.8%2C14.33-53.86%2C8-21.11-7.41-32.93-27.48-31.89-49.9%2C1.26-27.22%2C23.94-47.78%2C51.14-47.65%2C24.93.12%2C45.85%2C17.66%2C49.46%2C42.29.82%2C5.6.98%2C10.48-.65%2C16.28l-73.17.02c.65%2C5.36%2C3.6%2C10.1%2C8.19%2C13.67%2C11.9%2C9.23%2C29.91%2C6.75%2C39.78-6.97ZM1001.71%2C77.29c-4.39-13.76-17.75-19.79-30.81-16.86-8.64%2C1.93-15.85%2C7.75-17.61%2C16.93l48.42-.07Z%22%2F%3E%20%3Cpath%20fill%3D%22%2300b775%22%20d%3D%22M813.01%2C138.24c-18.39-.04-34.16-7.01-44.55-21.71-15.02-21.26-11.36-49.24%2C8.58-66.53%2C11.39-9.88%2C26.07-13.65%2C41.36-12.15%2C24.85%2C2.44%2C44.28%2C21.64%2C46.04%2C46.86%2C2.06%2C29.41-21.95%2C53.6-51.43%2C53.53ZM839.23%2C87.97c0-15.06-12.21-27.27-27.27-27.27s-27.27%2C12.21-27.27%2C27.27%2C12.21%2C27.27%2C27.27%2C27.27%2C27.27-12.21%2C27.27-27.27Z%22%2F%3E%20%3Cpath%20fill%3D%22%23fff%22%20d%3D%22M506.11%2C38.7l25.93.02.06%2C98.22-25.06.19-.27-13.94c-6.16%2C9.55-14.51%2C14.94-25.7%2C14.89-19.86%2C1.81-36.33-11.12-40.26-30.92l-.06-68.47%2C25.23-.03.17%2C59.53c.02%2C5.28%2C3.13%2C11.51%2C7.16%2C14.25%2C9.07%2C6.18%2C21.85%2C4.55%2C28.13-3.87%2C4.04-5.41%2C4.74-11.68%2C4.73-18.01l-.06-51.86Z%22%2F%3E%20%3Cpath%20fill%3D%22%2300b775%22%20d%3D%22M690.08%2C63.67c-5.07%2C3.84-8.34%2C9.51-8.37%2C15.72l-.25%2C57.68h-25.14s0-98.4%2C0-98.4h25.03s.18%2C14.3.18%2C14.3c5.13-9.15%2C13.33-13.83%2C23.28-15.06%2C13.22-1.64%2C26.81%2C2.04%2C35.23%2C12.79%2C4.11%2C5.24%2C8.25%2C12.35%2C8.28%2C19.35l.23%2C67-25.02.02.04-51.91c0-7.01-1.11-14.67-6.3-19.83-6.96-6.94-19.24-7.68-27.19-1.65Z%22%2F%3E%20%3Cpath%20fill%3D%22%2300b775%22%20d%3D%22M922.27%2C113.97l.17%2C23.17-21.37-.55c-11.26-.29-22.23-9.26-22.31-21.24l-.37-54.36-14.45-.06v-22.27s14.48%2C0%2C14.48%2C0l-.02-19.83%2C25.05-2.62.04%2C22.51%2C20.47-.04-.03%2C22.25-20.48.05.08%2C46.35c0%2C4.58%2C4.08%2C6.59%2C7.82%2C6.6l10.92.05Z%22%2F%3E%20%3Cpath%20fill%3D%22%23fff%22%20d%3D%22M572.48%2C137.02l-25.15.07V38.67s24.11.01%2C24.11.01c.06%2C5.5-.28%2C10%2C.98%2C16.79%2C5.14-11.85%2C16.03-18.58%2C29.55-17.73l-.03%2C24.27c-7.45-.21-14.53.85-20.35%2C5.59-4.56%2C3.71-8.82%2C9.79-8.85%2C16.23l-.25%2C53.18Z%22%2F%3E%20%3Crect%20fill%3D%22%23fff%22%20x%3D%22610.74%22%20y%3D%2238.62%22%20width%3D%2225.22%22%20height%3D%2298.49%22%2F%3E%20%3Cpath%20fill%3D%22%23fff%22%20d%3D%22M1188.97%2C137.74l-10.68.04-.15-24.47c-.03-4.36-3.96-7.18-7.88-7.31-4.45-.15-8.1%2C2.45-8.75%2C6.94l-.46%2C3.17-.05%2C21.67h-10.34s0-40.41%2C0-40.41h10.31s.15%2C5.82.15%2C5.82c1.68-2.24%2C2.63-3.65%2C4.82-4.67%2C4.96-2.32%2C10.94-2.26%2C15.74.6%2C2.06%2C1.23%2C3.44%2C3.1%2C5.1%2C5.15%2C2.24-4.55%2C6.26-6.61%2C11.07-7.28%2C8.68-1.2%2C17.13%2C4.6%2C17.71%2C13.85l.24%2C26.92h-10.65s-.24-25.06-.24-25.06c-.04-4.5-4.26-6.86-8.23-6.72-3.77.14-7.53%2C2.48-7.55%2C6.67l-.15%2C25.09Z%22%2F%3E%20%3Cpath%20fill%3D%22%23fff%22%20d%3D%22M1140.77%2C103.85c6.93%2C7.64%2C7.05%2C19.76.03%2C27.43-8.56%2C9.35-24.17%2C9.43-32.71-.04-7.1-7.87-6.97-19.71.22-27.53%2C8.49-9.23%2C24.05-9.13%2C32.46.14ZM1135.64%2C117.59c0-6.19-5.02-11.2-11.2-11.2s-11.2%2C5.02-11.2%2C11.2%2C5.02%2C11.2%2C11.2%2C11.2%2C11.2-5.02%2C11.2-11.2Z%22%2F%3E%20%3Cpath%20fill%3D%22%23fff%22%20d%3D%22M1095.3%2C124.22l7.53%2C6.24c-3.37%2C4.55-8.24%2C6.81-13.66%2C7.58-9.06%2C1.3-17.97-2.7-22.26-10.95-3.25-6.24-3.05-13.95.52-19.99l2.55-3.4c7.53-7.84%2C19.89-8.99%2C28.94-3.18%2C1.64%2C1.05%2C2.7%2C2.22%2C3.84%2C3.93l-7.96%2C6.41c-2.77-3.61-6.64-5.01-10.97-4.22-4.77.87-8.21%2C5.11-8.74%2C9.51-.61%2C5.14%2C2.39%2C9.85%2C6.55%2C11.6%2C5.1%2C2.15%2C10.19.86%2C13.65-3.52Z%22%2F%3E%20%3Cpath%20fill%3D%22%23fff%22%20d%3D%22M1046.12%2C138.13c-3.54-.67-5.78-3.55-5.69-6.75.1-3.53%2C2.57-6.09%2C6.22-6.55%2C4.2-.52%2C7.9%2C2.77%2C7.72%2C6.87-.18%2C4.18-3.79%2C7.28-8.25%2C6.43Z%22%2F%3E%20%3Cpath%20fill%3D%22%23fff%22%20d%3D%22M633.24%2C27.3c-6.43%2C4.73-14.47%2C4.02-19.71-.65-5.53-4.93-7.39-13.07-2.82-19.44%2C4.01-5.59%2C9.62-8.29%2C16.43-6.81%2C5.3%2C1.15%2C10.94%2C5.77%2C11.51%2C12.1.5%2C5.65-.68%2C11.33-5.41%2C14.8Z%22%2F%3E%20%3Crect%20fill%3D%22%23fc0%22%20y%3D%2255.41%22%20width%3D%22109.14%22%20height%3D%2239.58%22%2F%3E%20%3Crect%20fill%3D%22%23fb275d%22%20x%3D%2239.94%22%20y%3D%22111.71%22%20width%3D%2269.2%22%20height%3D%2225.43%22%2F%3E%20%3Ccircle%20fill%3D%22%2300b775%22%20cx%3D%2289.8%22%20cy%3D%2219.34%22%20r%3D%2219.34%22%2F%3E%20%3C%2Fg%3E%20%3C%2Fg%3E%20%3C%2Fsvg%3E';
+
 function renderResult(r){
   hideAll();
   const box=document.getElementById('resultBox');
@@ -545,7 +559,8 @@ function renderResult(r){
           '<div class="rc-name">'+esc(r.nom_ar||r.nom_fr||'—')+'</div>'+
           '<div class="rc-serie">'+esc(r.serie_ar||'')+'</div>'+
         '</div>'+
-        '<span class="rc-decision">'+(ICONS[st]||ICONS.fail)+esc(r.decision_ar||'—')+'</span>'+
+        '<div class="rc-emblem">'+(EMBLEM[st]||EMBLEM.fail)+'</div>'+
+        '<span class="rc-decision">'+esc(r.decision_ar||'—')+'</span>'+
       '</div>'+
       '<div class="rc-rows">'+
         '<div class="rc-row moy"><span class="rc-k">'+ROW_ICONS.moy+'المعدل</span><span class="rc-v">'+moy+' <small>/ 20</small></span></div>'+
@@ -556,14 +571,10 @@ function renderResult(r){
         row('centre','مركز الامتحان', r.centre_ar)+
         row('etab','المؤسسة', r.etab_ar)+
       '</div>'+
-      '<div class="rc-foot rc-share-skip">رقم الترشح: <b>'+esc(r.nodoss)+'</b></div>'+
-      '<div class="rc-brand">'+
-        '<div class="rc-brand-logo"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>'+
-        '<div class="rc-brand-txt"><span class="rc-brand-name">نتائجنا</span><span class="rc-brand-sub">المسابقات الوطنية الموريتانية</span></div>'+
-      '</div>'+
+      '<div class="rc-foot"><img class="rc-foot-img rc-foot-light" alt="maurinote" src="'+RC_LOGO_LIGHT+'"><img class="rc-foot-img rc-foot-dark" alt="maurinote" src="'+RC_LOGO_DARK+'"></div>'+
     '</div>'+
     '<div class="rc-share">'+
-      '<button class="share-btn primary" id="saveImgBtn" onclick="saveAsImage()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg> حفظ كصورة</button>'+
+      '<button class="share-btn primary" id="shareImgBtn" onclick="shareImage()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5 15.4 17.5M15.4 6.5 8.6 10.5"/></svg> مشاركة الصورة</button>'+
       '<button class="share-btn" onclick="copyLink(\''+esc(r.nodoss)+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg> نسخ الرابط</button>'+
     '</div>';
   box.scrollIntoView({behavior:'smooth',block:'center'});
@@ -611,27 +622,29 @@ function copyLink(nodoss){
   }
 }
 
-async function saveAsImage(){
+async function shareImage(){
   const card=document.getElementById('rcCard');
-  const btn=document.getElementById('saveImgBtn');
+  const btn=document.getElementById('shareImgBtn');
   if(!card||typeof html2canvas==='undefined'){toast('تعذّر إنشاء الصورة');return;}
   const orig=btn.innerHTML;
-  btn.disabled=true;btn.innerHTML='<span class="sb-spin"></span> جارٍ الحفظ';
-  card.classList.add('snapshot');
+  btn.disabled=true;btn.innerHTML='<span class="sb-spin"></span> جارٍ التجهيز';
   const dark=document.documentElement.getAttribute('data-theme')==='dark';
   try{
     const canvas=await html2canvas(card,{scale:2,backgroundColor:dark?'#152120':'#ffffff',useCORS:true,logging:false});
-    card.classList.remove('snapshot');
-    const name=(document.querySelector('.rc-name')?document.querySelector('.rc-name').textContent.trim():'نتيجة').replace(/\s+/g,'_');
-    canvas.toBlob(function(blob){
+    const blob=await new Promise(res=>canvas.toBlob(res,'image/png'));
+    const safe=(document.querySelector('.rc-name')?document.querySelector('.rc-name').textContent.trim():'نتيجة').replace(/\s+/g,'_');
+    const file=new File([blob],'نتيجة_'+safe+'.png',{type:'image/png'});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){
+      try{await navigator.share({files:[file],title:'نتيجتي في الباكالوريا',text:'نتيجتي عبر maurinote'});}
+      catch(e){/* المستخدم ألغى المشاركة */}
+    }else{
       const url=URL.createObjectURL(blob);
-      const a=document.createElement('a');a.href=url;a.download='نتيجة_'+name+'.png';
+      const a=document.createElement('a');a.href=url;a.download=file.name;
       document.body.appendChild(a);a.click();document.body.removeChild(a);
       setTimeout(()=>URL.revokeObjectURL(url),1000);
-      toast('تم حفظ الصورة');
-    },'image/png');
+      toast('تم حفظ الصورة — المشاركة غير مدعومة هنا');
+    }
   }catch(e){
-    card.classList.remove('snapshot');
     toast('تعذّر إنشاء الصورة');
   }
   btn.disabled=false;btn.innerHTML=orig;
