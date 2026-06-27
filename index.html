@@ -469,7 +469,7 @@ footer{border-top:1px solid var(--line);padding:46px 0 28px;position:relative;z-
 
 <section class="lanes-sec" id="competitions">
   <div class="wrap">
-    <p class="lead-2 wish">نتمنى لكم التوفيق</p>
+    <p class="lead-2 wish">فريق maurinote يتمنى لكم التوفيق</p>
     <div class="lanes" id="lanes"></div>
   </div>
 </section>
@@ -642,49 +642,6 @@ const SUPABASE_URL = 'https://eqwubmnzgjdfknlazdqi.supabase.co';     // مثال
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVxd3VibW56Z2pkZmtubGF6ZHFpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxMTYwMjEsImV4cCI6MjA5NzY5MjAyMX0._m_VBuoJvZoLM6rxhmi0BpCH224p3DnVgJZrPtq5LY4';    // المفتاح العام anon
 /* ⬆⬆⬆ الجدول المتوقع: notify_signups (name, email) ⬆⬆⬆ */
 
-/* ===================== إحصائيات باكالوريا 2025 ===================== */
-/* تجلب الأرقام الجاهزة من دالة Supabase: bac_stats_2025()
-   (نفّذ ملف maurinote_bac_stats.sql في SQL Editor أولاً) */
-
-function fmtInt(n){ return (n==null?0:Number(n)).toLocaleString('en-US'); }
-function fmtPct(n){ return (n==null?0:Number(n)).toFixed(1).replace(/\.0$/,'') + '%'; }
-
-/* تصنيف اللون حسب نسبة النجاح */
-function rateClass(p){ p=Number(p||0); return p>=40?'hi':(p>=20?'mid':'lo'); }
-
-function stShowError(msg){
-  const s=document.getElementById('stState');
-  if(!s) return;
-  s.className='st-state err';
-  s.innerHTML='<span>'+(msg||'تعذّر تحميل الإحصائيات حالياً.')+'</span>';
-}
-
-async function loadBacStats(){
-  const stateEl=document.getElementById('stState');
-  if(!stateEl) return;
-  if(SUPABASE_URL.startsWith('PUT_') || SUPABASE_ANON_KEY.startsWith('PUT_')){
-    stShowError('الإحصائيات غير متاحة حالياً.'); return;
-  }
-  try{
-    const res=await fetch(SUPABASE_URL.replace(/\/$/,'')+'/rest/v1/rpc/bac_stats_2025',{
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'apikey':SUPABASE_ANON_KEY,
-        'Authorization':'Bearer '+SUPABASE_ANON_KEY
-      },
-      body:'{}'
-    });
-    if(!res.ok) throw new Error('http '+res.status);
-    const data=await res.json();
-    renderBacStats(data);
-    stateEl.hidden=true;
-    document.getElementById('stWrap').hidden=false;
-  }catch(err){
-    console.warn('[إحصائيات الباكالوريا]', err);
-    stShowError('تعذّر تحميل الإحصائيات حالياً، حاول لاحقاً.');
-  }
-}
 
 /* يخفي القيم المشوّهة (التي تحوي رمز الاستبدال �) */
 function clean(s){ return (s||'').replace(/\uFFFD/g,'').trim(); }

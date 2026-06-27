@@ -24,6 +24,8 @@
   --green-deep:#0a7d57;
   --green-soft:#e7f6f0;
   --green-line:#c7e8dc;
+  --stat-green:#0fbf8a;
+  --gold-soft:rgba(245,180,1,.12);
   --t1:#0f9d6e; --t1s:#e7f6f0; --t1l:#c7e8dc;
   --t2:#0d9488; --t2s:#e2f4f1; --t2l:#bfe5df;
   --t3:#3f7d6e; --t3s:#e9f1ee; --t3l:#cfe0da;
@@ -56,6 +58,7 @@
   --t4:#84a8b3; --t4s:#16282d; --t4l:#274046;
   --amber:#f59e0b; --amber-soft:#3a2c12; --amber-line:#5e4719;
   --red:#f87171; --red-soft:#3a1c1c; --red-line:#5e2a2a;
+  --stat-green:#46e0ad;
   --mint:#1f7d60; --mint-soft:#143a2e; --mint-deep:#7fd9b5;
   --beige:#c98f4a; --beige-soft:#3a2c16; --beige-line:#5e4719;
   --navy:#0c2820;
@@ -354,6 +357,89 @@ body.concours{--ln:var(--t2);--ln-soft:var(--t2s);--ln-line:var(--t2l)}
 @media(max-width:680px){.entry-row{flex-direction:column}.search-btn{padding:13px;justify-content:center}}
 @media(max-width:520px){.rc-name{font-size:1.18rem}.rc-head{gap:10px}}
 @media(max-width:430px){.wm{height:21px}}
+
+/* ===================== إحصائيات الباكالوريا ===================== */
+.stats-sec [hidden]{display:none!important}
+.stats-sec{padding:8px 0 48px}
+.st-state{display:flex;align-items:center;justify-content:center;gap:11px;padding:36px 0;color:var(--ink-2);font-size:.9rem;font-weight:500}
+.st-state.err{color:var(--red)}
+.st-spin{width:18px;height:18px;border:2.5px solid var(--green-line);border-top-color:var(--green);border-radius:50%;animation:rcspin .7s linear infinite}
+.st-wrap{display:flex;flex-direction:column;gap:14px;max-width:920px;margin:0 auto}
+.kpi-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.kpi{background:var(--panel);border:1.5px solid var(--line-2);border-radius:14px;padding:18px 14px;text-align:center;position:relative;overflow:hidden;box-shadow:0 1px 2px rgba(22,32,29,.04)}
+.kpi::before{content:"";position:absolute;top:0;right:0;bottom:0;width:4px;background:var(--line-2)}
+.kpi-num{font-size:1.7rem;font-weight:800;letter-spacing:-.02em;line-height:1;direction:ltr;font-variant-numeric:tabular-nums;color:var(--ink)}
+.kpi-lbl{font-size:.78rem;font-weight:500;color:var(--ink-3);margin-top:6px}
+.kpi-green{background:var(--green-soft);border-color:var(--green-line)}
+.kpi-green::before{background:var(--green)}
+.kpi-green .kpi-num{color:var(--stat-green)}
+.kpi-green .kpi-lbl{color:var(--stat-green)}
+.kpi-red{background:var(--red-soft);border-color:var(--red-line)}
+.kpi-red::before{background:var(--red)}
+.kpi-red .kpi-num{color:var(--red)}
+.kpi-red .kpi-lbl{color:var(--red)}
+.kpi.rate-hi{background:var(--green-soft);border-color:var(--green-line)}
+.kpi.rate-hi::before{background:var(--green)}.kpi.rate-hi .kpi-num,.kpi.rate-hi .kpi-lbl{color:var(--stat-green)}
+.kpi.rate-mid{background:var(--amber-soft);border-color:var(--amber-line)}
+.kpi.rate-mid::before{background:var(--amber)}.kpi.rate-mid .kpi-num,.kpi.rate-mid .kpi-lbl{color:var(--amber)}
+.kpi.rate-lo{background:var(--red-soft);border-color:var(--red-line)}
+.kpi.rate-lo::before{background:var(--red)}.kpi.rate-lo .kpi-num,.kpi.rate-lo .kpi-lbl{color:var(--red)}
+.st-card{background:var(--panel);border:1.5px solid var(--line-2);border-radius:16px;padding:18px;box-shadow:0 1px 2px rgba(22,32,29,.04)}
+.st-card-h{font-size:.95rem;font-weight:700;color:var(--ink);margin-bottom:16px;text-align:right;display:flex;align-items:center;gap:8px}
+.st-card-h::before{content:"";width:3px;height:15px;border-radius:2px;background:var(--green);flex-shrink:0}
+.st-note{font-size:.74rem;color:var(--ink-3);margin-top:14px;text-align:right;line-height:1.7}
+.wlist{display:flex;flex-direction:column;gap:14px}
+.wrow{display:flex;flex-direction:column;gap:7px}
+.wrow-top{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.wrow-name{display:inline-flex;align-items:center;gap:8px;font-size:.9rem;font-weight:700;color:var(--ink)}
+.wrow-rate{font-size:.82rem;font-weight:800;direction:ltr;font-variant-numeric:tabular-nums}
+.wrow-rate.hi{color:var(--stat-green)}.wrow-rate.mid{color:var(--amber)}.wrow-rate.lo{color:var(--red)}
+.wbar{height:11px;border-radius:999px;overflow:hidden;display:flex;background:var(--red-soft)}
+.wbar-pass{height:100%;background:var(--green);width:0;transition:width 1s cubic-bezier(.5,0,.2,1)}
+.wbar.mid .wbar-pass{background:var(--amber)}
+.wbar.lo .wbar-pass{background:var(--red)}
+.wrow-sub{font-size:.76rem;color:var(--ink-2);direction:rtl}
+.wrow-sub b{color:var(--ink);font-weight:700}
+.wrank{display:inline-grid;place-items:center;width:21px;height:21px;border-radius:7px;background:var(--green-soft);color:var(--stat-green);font-size:.72rem;font-weight:800;flex-shrink:0;vertical-align:middle}
+.tops{display:flex;flex-direction:column;gap:18px}
+.top-track{border:1.5px solid var(--tt-line);border-radius:16px;overflow:hidden;background:var(--panel)}
+.top-track-head{display:flex;align-items:center;gap:11px;padding:13px 16px;background:var(--tt-soft);border-bottom:1px solid var(--tt-line)}
+.top-abbr{flex-shrink:0;min-width:46px;height:30px;padding:0 12px;display:grid;place-items:center;border-radius:9px;background:var(--tt);color:#fff;font-weight:800;font-size:.84rem;letter-spacing:.06em;direction:ltr}
+.top-track-name{font-size:1rem;font-weight:700;color:var(--ink);display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.top-track-name .cnt{font-size:.72rem;font-weight:500;color:var(--ink-3)}
+.top-rows{display:flex;flex-direction:column}
+.top-row{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:13px;padding:13px 16px;border-bottom:1px solid var(--line)}
+.top-row:last-child{border-bottom:none}
+.top-row.r1{background:linear-gradient(270deg,var(--gold-soft),transparent 72%);padding:17px 16px;border-bottom:1px solid var(--tt-line)}
+.top-medal{position:relative;width:34px;height:34px;flex-shrink:0;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:.92rem;color:#fff;box-shadow:0 3px 8px -3px rgba(22,32,29,.35)}
+.r1 .top-medal{width:44px;height:44px;font-size:1.1rem;background:linear-gradient(145deg,#fbcf45,#dd9e06);box-shadow:0 6px 16px -5px rgba(221,158,6,.65)}
+.r2 .top-medal{background:linear-gradient(145deg,#d3dae0,#9aa7b0)}
+.r3 .top-medal{background:linear-gradient(145deg,#e3a877,#bd7338)}
+.top-info{min-width:0;text-align:right}
+.top-name{display:block;font-size:.96rem;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.r1 .top-name{font-size:1.08rem}
+.top-meta{display:block;font-size:.78rem;color:var(--ink-2);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top-meta .sep{margin:0 6px;color:var(--ink-3)}
+.top-moy{flex-shrink:0;text-align:center;direction:ltr;min-width:58px}
+.top-moy .v{display:block;font-size:1.18rem;font-weight:800;color:var(--stat-green);font-variant-numeric:tabular-nums;line-height:1}
+.r1 .top-moy .v{font-size:1.5rem}
+.top-moy .l{display:block;font-size:.66rem;color:var(--ink-3);font-weight:600;margin-top:4px}
+.top-track.tk-sn{--tt:#00a36c;--tt-soft:var(--green-soft);--tt-line:var(--green-line)}
+.top-track.tk-m{--tt:#4f6bed;--tt-soft:rgba(79,107,237,.10);--tt-line:rgba(79,107,237,.26)}
+.top-track.tk-lo{--tt:#c97f00;--tt-soft:rgba(201,127,0,.10);--tt-line:rgba(201,127,0,.28)}
+[data-theme="dark"] .top-track.tk-m{--tt:#8197f4;--tt-soft:rgba(129,151,244,.13);--tt-line:rgba(129,151,244,.26)}
+[data-theme="dark"] .top-track.tk-lo{--tt:#e3a93a;--tt-soft:rgba(227,169,58,.13);--tt-line:rgba(227,169,58,.28)}
+.tops-empty{padding:26px 16px;text-align:center;color:var(--ink-3);font-size:.84rem;line-height:1.7}
+@media(max-width:680px){
+  .kpi-strip{grid-template-columns:1fr 1fr}
+  .kpi-num{font-size:1.5rem}
+  .top-row{gap:10px;padding:12px 13px}
+  .top-row.r1{padding:14px 13px}
+  .top-moy{min-width:50px}
+  .r1 .top-moy .v{font-size:1.3rem}
+  .top-name{font-size:.9rem}
+  .r1 .top-name{font-size:1rem}
+}
 </style>
 
 </head>
@@ -480,6 +566,51 @@ body.concours{--ln:var(--t2);--ln-soft:var(--t2s);--ln-line:var(--t2l)}
 
     <div class="rc" id="resultBox"></div>
     <div class="rc-msg" id="msgBox"></div>
+  </div>
+</section>
+
+<!-- إحصائيات باكالوريا 2025 -->
+<section class="stats-sec" id="bac-stats">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-tag">أرقام الدورة العادية</div>
+      <h2>إحصائيات باكالوريا 2025</h2>
+      <p>نظرة عامة على نتائج الدورة العادية.</p>
+    </div>
+    <div class="st-state" id="stState">
+      <span class="st-spin"></span>
+      <span>جارٍ تحميل الإحصائيات…</span>
+    </div>
+    <div class="st-wrap" id="stWrap" hidden>
+      <div class="kpi-strip">
+        <div class="kpi" id="kpiRate">
+          <div class="kpi-num" id="kPassRate">—</div>
+          <div class="kpi-lbl">نسبة النجاح</div>
+        </div>
+        <div class="kpi kpi-green">
+          <div class="kpi-num" id="kPassed">—</div>
+          <div class="kpi-lbl">ناجح</div>
+        </div>
+        <div class="kpi kpi-red">
+          <div class="kpi-num" id="kFailed">—</div>
+          <div class="kpi-lbl">غير ناجح</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-num" id="kPresent">—</div>
+          <div class="kpi-lbl">إجمالي المترشحين</div>
+        </div>
+      </div>
+      <div class="st-card">
+        <div class="st-card-h">النتائج حسب الولاية</div>
+        <div class="wlist" id="wilayaList"></div>
+        <div class="st-note">أعلى 5 ولايات من حيث عدد الناجحين في الدورة العادية.</div>
+      </div>
+      <div class="st-card">
+        <div class="st-card-h">الأوائل في الشُّعب الثلاث</div>
+        <div class="tops" id="topsList"></div>
+        <div class="st-note">الأوائل في العلوم الطبيعية (SN) والرياضيات (M) والآداب الأصلية (LO).</div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -667,6 +798,130 @@ async function searchResult(num){
     showMsg('err','تعذّر جلب النتيجة','حدث خطأ في الاتصال. تأكد من الإنترنت وحاول مرة أخرى.');
   }
 }
+
+/* ===================== إحصائيات باكالوريا 2025 ===================== */
+function fmtInt(n){ return (n==null?0:Number(n)).toLocaleString('en-US'); }
+function fmtPct(n){ return (n==null?0:Number(n)).toFixed(1).replace(/\.0$/,'') + '%'; }
+function rateClass(p){ p=Number(p||0); return p>=40?'hi':(p>=20?'mid':'lo'); }
+
+function stShowError(msg){
+  const s=document.getElementById('stState');
+  if(!s) return;
+  s.className='st-state err';
+  s.innerHTML='<span>'+(msg||'تعذّر تحميل الإحصائيات حالياً.')+'</span>';
+}
+
+async function loadBacStats(){
+  const stateEl=document.getElementById('stState');
+  if(!stateEl) return;
+  try{
+    const res=await fetch(SUPABASE_URL.replace(/\/$/,'')+'/rest/v1/rpc/bac_stats_2025',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'apikey':SUPABASE_ANON_KEY,
+        'Authorization':'Bearer '+SUPABASE_ANON_KEY
+      },
+      body:'{}'
+    });
+    if(!res.ok) throw new Error('http '+res.status);
+    const data=await res.json();
+    renderBacStats(data);
+    stateEl.hidden=true;
+    document.getElementById('stWrap').hidden=false;
+  }catch(err){
+    console.warn('[إحصائيات الباكالوريا]', err);
+    stShowError('تعذّر تحميل الإحصائيات حالياً، حاول لاحقاً.');
+  }
+}
+
+function cleanTxt(s){ return (s||'').replace(/�/g,'').trim(); }
+function isBad(s){ return !s || /�/.test(s); }
+
+function renderBacStats(d){
+  const o=d.overview||{};
+  const failed=Number(o.failed||0)+Number(o.session||0);
+  document.getElementById('kPassRate').textContent=fmtPct(o.pass_rate);
+  document.getElementById('kPassed').textContent=fmtInt(o.passed);
+  document.getElementById('kFailed').textContent=fmtInt(failed);
+  document.getElementById('kPresent').textContent=fmtInt(o.total_candidates!=null?o.total_candidates:o.present);
+  document.getElementById('kpiRate').classList.add('rate-'+rateClass(o.pass_rate));
+  renderWilayas(d.by_wilaya||[]);
+  renderTops(d.top_students||d.tops||d.top3_by_serie||[]);
+}
+
+function renderWilayas(rows){
+  const el=document.getElementById('wilayaList'); if(!el) return;
+  const clean_rows=rows
+    .filter(r=>!isBad(r.wilaya))
+    .sort((a,b)=>Number(b.passed||0)-Number(a.passed||0))
+    .slice(0,5);
+  el.innerHTML=clean_rows.map((r,i)=>{
+    const present=Number(r.present||0),passed=Number(r.passed||0);
+    const pct=Number(r.pass_rate||0);
+    const cls=rateClass(pct);
+    return '<div class="wrow">'+
+      '<div class="wrow-top">'+
+        '<span class="wrow-name"><span class="wrank">'+(i+1)+'</span>'+cleanTxt(r.wilaya)+'</span>'+
+        '<span class="wrow-rate '+cls+'">'+fmtPct(pct)+'</span>'+
+      '</div>'+
+      '<div class="wbar '+cls+'"><div class="wbar-pass" data-w="'+pct.toFixed(1)+'"></div></div>'+
+      '<div class="wrow-sub"><b>'+fmtInt(passed)+'</b> ناجح من أصل '+fmtInt(present)+' طالباً</div>'+
+    '</div>';
+  }).join('');
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    el.querySelectorAll('.wbar-pass').forEach(b=>{ b.style.width=b.dataset.w+'%'; });
+  }));
+}
+
+function renderTops(rows){
+  const el=document.getElementById('topsList'); if(!el) return;
+  const TRACKS=[
+    {key:'SN',cls:'tk-sn',name:'العلوم الطبيعية'},
+    {key:'M', cls:'tk-m', name:'الرياضيات'},
+    {key:'LO',cls:'tk-lo',name:'الآداب الأصلية'}
+  ];
+  const norm=(rows||[]).map(r=>({
+    serie:  String(r.serie??r.track??r.filiere??r.section??r.shuba??'').toUpperCase().trim(),
+    rang:   Number(r.rang??r.rank??r.position??r.ordre??0),
+    nom:    cleanTxt(r.nom??r.name??r.etudiant??r.student??''),
+    etab:   cleanTxt(r.etab??r.school??r.ecole??r.etablissement??''),
+    wilaya: cleanTxt(r.wilaya??r.state??''),
+    moy:    (r.moy??r.moyenne??r.average??r.avg??r.note)
+  })).filter(r=>r.nom&&!isBad(r.nom));
+  let html='',any=false;
+  TRACKS.forEach(t=>{
+    let list=norm.filter(r=>r.serie===t.key);
+    list.sort((a,b)=>(a.rang&&b.rang)?a.rang-b.rang:(Number(b.moy||0)-Number(a.moy||0)));
+    list=list.slice(0,3);
+    if(!list.length) return;
+    any=true;
+    html+='<div class="top-track '+t.cls+'">'+
+      '<div class="top-track-head">'+
+        '<span class="top-abbr">'+t.key+'</span>'+
+        '<span class="top-track-name">'+t.name+'<span class="cnt">أعلى 3 معدلات</span></span>'+
+      '</div>'+
+      '<div class="top-rows">'+
+        list.map((r,i)=>{
+          const rank=r.rang||(i+1);
+          const moy=(r.moy==null||r.moy==='')?'—':Number(r.moy).toFixed(2);
+          const meta=[r.etab,r.wilaya].filter(Boolean).join('<span class="sep">·</span>');
+          return '<div class="top-row r'+(i+1)+'">'+
+            '<span class="top-medal">'+rank+'</span>'+
+            '<span class="top-info">'+
+              '<span class="top-name">'+(r.nom||'—')+'</span>'+
+              (meta?'<span class="top-meta">'+meta+'</span>':'')+
+            '</span>'+
+            '<span class="top-moy"><span class="v">'+moy+'</span><span class="l">المعدل</span></span>'+
+          '</div>';
+        }).join('')+
+      '</div>'+
+    '</div>';
+  });
+  el.innerHTML=any?html:'<div class="tops-empty">سيظهر الأوائل فور توفّر بياناتهم في قاعدة البيانات.</div>';
+}
+
+document.addEventListener('DOMContentLoaded', loadBacStats);
 
 /* auto-load result if ?n= in URL (shareable links) */
 (function(){
