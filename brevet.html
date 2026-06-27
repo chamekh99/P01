@@ -394,13 +394,80 @@ function applyTheme(t){if(t==='dark')document.documentElement.setAttribute('data
 function toggleTheme(){const cur=document.documentElement.getAttribute('data-theme')==='dark'?'dark':'light';const next=cur==='dark'?'light':'dark';applyTheme(next);try{localStorage.setItem('theme',next);}catch(e){}}
 (function(){let t=null;try{t=localStorage.getItem('theme');}catch(e){}applyTheme(t==='dark'?'dark':'light');})();
 window.addEventListener('scroll',()=>{document.getElementById('hdr').classList.toggle('scrolled',window.scrollY>10);});
-function doSearch(){
-  var v=document.getElementById('searchInput').value.replace(/[^0-9]/g,'');
-  var box=document.getElementById('resultBox');
-  if(!v){var c=document.querySelector('.finder');c.animate([{transform:'translateX(0)'},{transform:'translateX(-7px)'},{transform:'translateX(7px)'},{transform:'translateX(0)'}],{duration:280});document.getElementById('searchInput').focus();return;}
-  box.classList.add('show');
-  box.scrollIntoView({behavior:'smooth',block:'center'});
+
+const API_URL = "https://api-results.chamekhahmed399.workers.dev/";
+
+async function doSearch(){
+  var input = document.getElementById('searchInput');
+  var v = input.value.replace(/[^0-9]/g,'');
+  var box = document.getElementById('resultBox');
+  var btn = document.getElementById('searchBtn');
+
+  if(!v){
+    var c=document.querySelector('.finder');
+    c.animate([{transform:'translateX(0)'},{transform:'translateX(-7px)'},{transform:'translateX(7px)'},{transform:'translateX(0)'}],{duration:280});
+    input.focus();
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = "جاري البحث...";
+
+  try{
+    var res = await fetch(API_URL + "?num=" + v);
+    var data = await res.json();
+
+    if(!data.found){
+      box.innerHTML =
+        '<div class="result-ic" style="background:var(--amber-soft);color:var(--amber)">'+
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg></div>'+
+        '<h3>لم يتم العثور على نتيجة</h3>'+
+        '<p>تأكد من رقم الترشح وحاول مرة أخرى. إن كان الرقم صحيحا ولم تظهر النتيجة، فقد لا تكون ضمن القائمة المعلنة.</p>';
+    } else {
+      var r = data.result;
+      var passed = (r.decision || "").trim() === "Admis";
+      var statusColor = passed ? "var(--green-deep)" : "var(--red)";
+      var statusBg = passed ? "var(--green-soft)" : "var(--red-soft)";
+      var statusText = passed ? "ناجح" : "راسب";
+      var statusIcon = passed
+        ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>'
+        : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>';
+
+      box.innerHTML =
+        '<div class="result-ic" style="background:'+statusBg+';color:'+statusColor+'">'+statusIcon+'</div>'+
+        '<h3 style="font-size:1.4rem">'+r.nom+'</h3>'+
+        '<div style="display:inline-flex;align-items:center;gap:7px;font-size:.85rem;font-weight:700;padding:7px 20px;border-radius:999px;margin:10px 0 18px;color:'+statusColor+';background:'+statusBg+'">'+statusText+'</div>'+
+        '<div style="display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;text-align:right;margin-top:6px">'+
+          rowHtml('المعدل', r.moyenne_bepc + ' / 20', statusColor)+
+          rowHtml('القرار', r.decision || '—')+
+          rowHtml('الولاية', r.wilaya || '—')+
+          rowHtml('مركز الامتحان', r.centre || '—')+
+          rowHtml('المؤسسة', r.ecole || '—')+
+          rowHtml('مكان الميلاد', r.lieu_nais || '—')+
+        '</div>';
+    }
+    box.classList.add('show');
+    box.scrollIntoView({behavior:'smooth',block:'center'});
+  } catch(e){
+    box.innerHTML =
+      '<div class="result-ic" style="background:var(--red-soft);color:var(--red)">'+
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01"/><circle cx="12" cy="12" r="9"/></svg></div>'+
+      '<h3>تعذّر الاتصال</h3>'+
+      '<p>حدث خطأ أثناء جلب النتيجة. تحقق من اتصالك وحاول مجددا.</p>';
+    box.classList.add('show');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "عرض النتيجة";
+  }
 }
+
+function rowHtml(label, value, valColor){
+  return '<div style="display:flex;justify-content:space-between;gap:16px;padding:13px 18px;background:var(--panel)">'+
+    '<span style="color:var(--ink-3);font-size:.86rem;font-weight:500">'+label+'</span>'+
+    '<span style="color:'+(valColor||'var(--ink)')+';font-size:.9rem;font-weight:700;text-align:left">'+value+'</span>'+
+  '</div>';
+}
+
 document.getElementById('searchInput').addEventListener('keydown',function(e){if(e.key==='Enter')doSearch();});
 </script>
 </body>
