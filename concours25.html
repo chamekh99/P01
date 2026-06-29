@@ -215,7 +215,26 @@ body.concours{--ln:var(--t2);--ln-soft:var(--t2s);--ln-line:var(--t2l)}
 .rc-msg p{font-size:.89rem;color:var(--ink-2);font-weight:400;line-height:1.7}
 .rc-msg p b{color:var(--ink);font-weight:700}
 
-@media(max-width:680px){.entry-row{flex-direction:column}.search-btn{padding:13px;justify-content:center}}
+/* hierarchical search */
+.finder-sub{font-size:.84rem;color:var(--ink-3);text-align:center;margin-top:6px;margin-bottom:20px}
+.steps-wrap{display:flex;flex-direction:column;gap:16px}
+.step-group{display:flex;flex-direction:column;gap:7px}
+.step-lbl{font-size:.82rem;font-weight:600;color:var(--ink-2)}
+.sel-wrap{position:relative}
+.sel-wrap select{width:100%;font-family:inherit;font-size:.95rem;color:var(--ink);background:var(--panel-2);border:1.5px solid var(--line-2);border-radius:11px;padding:12px 44px 12px 16px;appearance:none;-webkit-appearance:none;cursor:pointer;transition:.2s}
+.sel-wrap select:focus{outline:none;border-color:var(--ln);background:var(--panel);box-shadow:0 0 0 3px var(--ln-soft)}
+.sel-wrap select:disabled{opacity:.6;cursor:default}
+.sel-arrow{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--ink-3);pointer-events:none}
+.student-filter{font-family:inherit;font-size:.9rem;color:var(--ink);background:var(--panel-2);border:1.5px solid var(--line-2);border-radius:11px;padding:10px 14px;width:100%;transition:.2s}
+.student-filter:focus{outline:none;border-color:var(--ln);background:var(--panel);box-shadow:0 0 0 3px var(--ln-soft)}
+.student-filter::placeholder{color:var(--ink-3);font-weight:400}
+.student-list{max-height:270px;overflow-y:auto;border:1.5px solid var(--line-2);border-radius:11px;padding:4px}
+.student-item{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 12px;border-radius:8px;border:none;background:transparent;cursor:pointer;text-align:right;transition:.15s;font-family:inherit}
+.student-item:hover{background:var(--ln-soft)}
+.st-name{font-size:.88rem;font-weight:600;color:var(--ink);flex:1;min-width:0;word-break:break-word;text-align:right;line-height:1.4}
+.st-total{font-size:.82rem;font-weight:700;color:var(--ink-3);flex-shrink:0;direction:ltr;white-space:nowrap}
+.st-empty,.st-loading{padding:16px;text-align:center;color:var(--ink-3);font-size:.86rem;display:flex;align-items:center;justify-content:center;gap:8px}
+.st-spin{width:16px;height:16px;border:2px solid var(--line-2);border-top-color:var(--ln);border-radius:50%;animation:rcspin .7s linear infinite;flex-shrink:0}
 @media(max-width:520px){.rc-name{font-size:1.18rem}.rc-head{gap:10px}}
 </style>
 
@@ -237,12 +256,35 @@ body.concours{--ln:var(--t2);--ln-soft:var(--t2s);--ln-line:var(--t2l)}
   <div class="wrap">
     <div class="finder">
       <h3>ابحث عن نتيجتك</h3>
-      <div class="entry-row">
-        <div class="input-wrap">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-          <input type="text" id="searchInput" inputmode="numeric" placeholder="اكتب رقم ترشحك" autocomplete="off">
+      <p class="finder-sub">اختر الولاية ثم المدرسة ثم ابحث عن اسمك</p>
+      <div class="steps-wrap">
+
+        <div class="step-group">
+          <label class="step-lbl" for="selWilaya">الولاية</label>
+          <div class="sel-wrap">
+            <select id="selWilaya" onchange="onWilayaChange()">
+              <option value="" disabled selected>جارٍ التحميل…</option>
+            </select>
+            <svg class="sel-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
         </div>
-        <button class="search-btn" id="searchBtn" onclick="doSearch()">عرض النتيجة</button>
+
+        <div class="step-group" id="stepEcole" hidden>
+          <label class="step-lbl" for="selEcole">المدرسة</label>
+          <div class="sel-wrap">
+            <select id="selEcole" onchange="onEcoleChange()">
+              <option value="" disabled selected>— اختر المدرسة —</option>
+            </select>
+            <svg class="sel-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
+        </div>
+
+        <div class="step-group" id="stepStudents" hidden>
+          <label class="step-lbl">ابحث عن اسمك</label>
+          <input type="text" id="studentFilter" class="student-filter" placeholder="اكتب جزءاً من الاسم للتصفية…" oninput="filterStudents()" autocomplete="off">
+          <div class="student-list" id="studentList"></div>
+        </div>
+
       </div>
     </div>
 
@@ -264,15 +306,131 @@ const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
 const RESULTS_TABLE='concours_results';
 
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
-function setLoading(on){const btn=document.getElementById('searchBtn');btn.disabled=on;if(on){btn.dataset.h=btn.innerHTML;btn.innerHTML='<span class="btn-spin"></span> جارٍ البحث';}else if(btn.dataset.h){btn.innerHTML=btn.dataset.h;}}
 function hideAll(){document.getElementById('resultBox').classList.remove('show');document.getElementById('msgBox').classList.remove('show');}
+function cleanDisplay(s){return(s||'').replace(/ـ/g,'').replace(/\s+/g,' ').trim();}
 
-function doSearch(){
-  var v=document.getElementById('searchInput').value.replace(/[^0-9]/g,'');
-  if(!v){var c=document.querySelector('.finder');c.animate([{transform:'translateX(0)'},{transform:'translateX(-7px)'},{transform:'translateX(7px)'},{transform:'translateX(0)'}],{duration:280});document.getElementById('searchInput').focus();return;}
-  searchResult(v);
+/* ── Supabase helper ── */
+async function sbFetch(params){
+  const url=SUPABASE_URL.replace(/\/$/,'')+'/rest/v1/'+RESULTS_TABLE+'?'+params;
+  const r=await fetch(url,{headers:{'apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+SUPABASE_ANON_KEY,'Prefer':'count=none'}});
+  if(!r.ok)throw new Error('HTTP '+r.status);
+  return r.json();
 }
-document.getElementById('searchInput').addEventListener('keydown',function(e){if(e.key==='Enter')doSearch();});
+
+/* ── Step 1: load wilayas on page load ── */
+async function loadWilayas(){
+  const sel=document.getElementById('selWilaya');
+  try{
+    const rows=await sbFetch('select=Wilaya&order=Wilaya');
+    const wilayas=[...new Set(rows.map(r=>r['Wilaya']).filter(Boolean))].sort((a,b)=>cleanDisplay(a).localeCompare(cleanDisplay(b),'ar'));
+    sel.innerHTML='<option value="" disabled selected>— اختر الولاية —</option>';
+    wilayas.forEach(w=>{const o=document.createElement('option');o.value=w;o.textContent=cleanDisplay(w);sel.appendChild(o);});
+  }catch(e){
+    sel.innerHTML='<option value="" disabled selected>تعذّر التحميل — حدّث الصفحة</option>';
+  }
+}
+
+/* ── Step 2: wilaya selected → load schools ── */
+async function onWilayaChange(){
+  const w=document.getElementById('selWilaya').value;
+  if(!w)return;
+  hideAll();
+  document.getElementById('stepStudents').hidden=true;
+  const ecoleGroup=document.getElementById('stepEcole');
+  const sel=document.getElementById('selEcole');
+  ecoleGroup.hidden=false;
+  sel.innerHTML='<option value="" disabled selected>جارٍ التحميل…</option>';
+  sel.disabled=true;
+  try{
+    const rows=await sbFetch('Wilaya=eq.'+encodeURIComponent(w)+'&select=Ecole&order=Ecole');
+    const ecoles=[...new Set(rows.map(r=>r['Ecole']).filter(Boolean))].sort((a,b)=>cleanDisplay(a).localeCompare(cleanDisplay(b),'ar'));
+    sel.innerHTML='<option value="" disabled selected>— اختر المدرسة —</option>';
+    ecoles.forEach(e=>{const o=document.createElement('option');o.value=e;o.textContent=cleanDisplay(e);sel.appendChild(o);});
+    sel.disabled=false;
+  }catch(e){
+    sel.innerHTML='<option value="" disabled selected>تعذّر التحميل</option>';
+    sel.disabled=false;
+  }
+}
+
+/* ── Step 3: school selected → load students ── */
+let _students=[];
+
+async function onEcoleChange(){
+  const w=document.getElementById('selWilaya').value;
+  const ec=document.getElementById('selEcole').value;
+  if(!w||!ec)return;
+  hideAll();
+  const studGroup=document.getElementById('stepStudents');
+  const list=document.getElementById('studentList');
+  const filterIn=document.getElementById('studentFilter');
+  filterIn.value='';
+  studGroup.hidden=false;
+  list.innerHTML='<div class="st-loading"><span class="st-spin"></span> جارٍ التحميل…</div>';
+  try{
+    const rows=await sbFetch('Wilaya=eq.'+encodeURIComponent(w)+'&Ecole=eq.'+encodeURIComponent(ec)+'&select=Nom,Total&order=Nom');
+    _students=rows;
+    renderStudentList(rows);
+  }catch(e){
+    list.innerHTML='<div class="st-empty">تعذّر تحميل الطلاب — تحقق من الإنترنت</div>';
+  }
+}
+
+function filterStudents(){
+  const q=document.getElementById('studentFilter').value.trim();
+  if(!q){renderStudentList(_students);return;}
+  renderStudentList(_students.filter(r=>cleanDisplay(r['Nom']||'').includes(q)));
+}
+
+function renderStudentList(rows){
+  const list=document.getElementById('studentList');
+  if(!rows.length){list.innerHTML='<div class="st-empty">لا يوجد اسم مطابق</div>';return;}
+  list.innerHTML=rows.map((r,i)=>
+    '<button class="student-item" onclick="showStudent('+i+')">'+
+      '<span class="st-name">'+esc(cleanDisplay(r['Nom']||'—'))+'</span>'+
+      '<span class="st-total">'+(r['Total']!=null?r['Total']:'—')+'</span>'+
+    '</button>'
+  ).join('');
+}
+
+function showStudent(i){const r=_students[i];if(r)renderConcours(r);}
+
+/* ── Render result card ── */
+function renderConcours(r){
+  hideAll();
+  const box=document.getElementById('resultBox');
+  const totalNum=(r['Total']!=null&&r['Total']!=='')?Number(r['Total']):null;
+  const totalStr=totalNum!=null?totalNum:'—';
+  const pct=totalNum!=null?Math.max(0,Math.min(100,(totalNum/200)*100)):0;
+  const wilaya=cleanDisplay(document.getElementById('selWilaya').value||'—');
+  const ecole=cleanDisplay(document.getElementById('selEcole').value||'—');
+  function row(ic,k,v){return'<div class="rc-row"><span class="rc-k">'+ROW_ICONS[ic]+k+'</span><span class="rc-v">'+esc(v||'—')+'</span></div>';}
+  box.className='rc show';
+  box.innerHTML=
+    '<div class="rc-card" id="rcCard">'+
+      '<div class="rc-head">'+
+        '<div class="rc-head-main">'+
+          '<div class="rc-name">'+esc(cleanDisplay(r['Nom']||'—'))+'</div>'+
+        '</div>'+
+      '</div>'+
+      '<div class="rc-rows">'+
+        '<div class="rc-row moy"><span class="rc-k">'+ROW_ICONS.moy+'المجموع</span><span class="rc-v">'+totalStr+'<small> / 200</small></span></div>'+
+      '</div>'+
+      (totalNum!=null?'<div class="rc-moybar"><div class="rc-moybar-fill" id="moybar" style="background:var(--ln)"></div></div>':'')+
+      '<div class="rc-rows" style="padding-top:0">'+
+        row('wilaya','الولاية',wilaya)+
+        row('etab','المدرسة',ecole)+
+      '</div>'+
+      '<div class="rc-foot"><img class="rc-foot-img rc-foot-light" alt="maurinote" src="'+RC_LOGO_LIGHT+'"><img class="rc-foot-img rc-foot-dark" alt="maurinote" src="'+RC_LOGO_DARK+'"></div>'+
+    '</div>'+
+    '<div class="rc-share">'+
+      '<button class="share-btn primary" id="shareImgBtn" onclick="shareImage()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5 15.4 17.5M15.4 6.5 8.6 10.5"/></svg> مشاركة الصورة</button>'+
+    '</div>';
+  box.scrollIntoView({behavior:'smooth',block:'center'});
+  if(totalNum!=null){requestAnimationFrame(()=>requestAnimationFrame(()=>{const b=document.getElementById('moybar');if(b)b.style.width=pct+'%';}));}
+}
+
+document.addEventListener('DOMContentLoaded',loadWilayas);
 
 const EMBLEM={
   pass:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>',
@@ -303,51 +461,6 @@ function showMsg(type,title,html){
   m.scrollIntoView({behavior:'smooth',block:'center'});
 }
 
-function renderResult(r){
-  hideAll();
-  const box=document.getElementById('resultBox');
-  const st=r.status||'fail';
-  const moyNum=(r.moy_bac!=null&&r.moy_bac!=='')?Number(r.moy_bac):null;
-  const moy=moyNum!=null?moyNum.toFixed(2):'—';
-  const pct=moyNum!=null?Math.max(0,Math.min(100,(moyNum/20)*100)):0;
-  function row(ic,k,v){return '<div class="rc-row"><span class="rc-k">'+ROW_ICONS[ic]+k+'</span><span class="rc-v">'+esc(v||'—')+'</span></div>';}
-  box.className='rc rc-st-'+st+' show';
-  box.innerHTML=
-    '<div class="rc-card" id="rcCard">'+
-      '<div class="rc-celebrate"><span class="ce-spark">🎉</span> مبروك النجاح! <span class="ce-spark">🎉</span></div>'+
-      '<div class="rc-head">'+
-        '<div class="rc-head-main">'+
-          '<div class="rc-name">'+esc(r.nom_ar||r.nom_fr||'—')+'</div>'+
-          '<div class="rc-serie">'+esc(r.serie_ar||'')+'</div>'+
-        '</div>'+
-        '<div class="rc-emblem">'+(EMBLEM[st]||EMBLEM.fail)+'</div>'+
-        '<span class="rc-decision">'+esc(r.decision_ar||'—')+'</span>'+
-      '</div>'+
-      '<div class="rc-rows">'+
-        '<div class="rc-row moy"><span class="rc-k">'+ROW_ICONS.moy+'المعدل</span><span class="rc-v">'+moy+' <small>/ 20</small></span></div>'+
-      '</div>'+
-      (moyNum!=null?'<div class="rc-moybar"><div class="rc-moybar-fill" id="moybar"></div></div>':'')+
-      '<div class="rc-rows" style="padding-top:0">'+
-        row('wilaya','الولاية', r.wilaya_ar)+
-        row('centre','مركز الامتحان', r.centre_ar)+
-        row('etab','المؤسسة', r.etab_ar)+
-      '</div>'+
-      '<div class="rc-foot"><img class="rc-foot-img rc-foot-light" alt="maurinote" src="'+RC_LOGO_LIGHT+'"><img class="rc-foot-img rc-foot-dark" alt="maurinote" src="'+RC_LOGO_DARK+'"></div>'+
-    '</div>'+
-    '<div class="rc-share">'+
-      '<button class="share-btn primary" id="shareImgBtn" onclick="shareImage()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5 15.4 17.5M15.4 6.5 8.6 10.5"/></svg> مشاركة الصورة</button>'+
-      '<button class="share-btn" onclick="copyLink(\''+esc(r.nodoss)+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg> نسخ الرابط</button>'+
-    '</div>';
-  box.scrollIntoView({behavior:'smooth',block:'center'});
-  if(st==='pass'){setTimeout(celebrate,300);}
-  try{history.replaceState(null,'','?n='+encodeURIComponent(r.nodoss));}catch(e){}
-  if(moyNum!=null){
-    requestAnimationFrame(()=>requestAnimationFrame(()=>{
-      const bar=document.getElementById('moybar');
-      if(bar)bar.style.width=pct+'%';
-    }));
-  }
-}
 
 function celebrate(){
   const colors=['#ffcc00','#fb275d','#00b775','#0f9d6e','#ffd84d'];
@@ -410,31 +523,6 @@ async function shareImage(){
   btn.disabled=false;btn.innerHTML=orig;
 }
 
-async function searchResult(num){
-  num=String(num).replace(/[^0-9]/g,'');
-  if(num.length<5)num=num.padStart(5,'0');
-  setLoading(true);
-  try{
-    const url=SUPABASE_URL.replace(/\/$/,'')+'/rest/v1/'+RESULTS_TABLE+'?nodoss=eq.'+encodeURIComponent(num)+'&select=*';
-    const res=await fetch(url,{headers:{'apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+SUPABASE_ANON_KEY}});
-    setLoading(false);
-    if(!res.ok){showMsg('err','تعذّر جلب النتيجة','حدث خطأ في الاتصال. تأكد من الإنترنت وحاول مرة أخرى.');return;}
-    const data=await res.json();
-    if(!data||!data.length){showMsg('warn','لا توجد نتيجة بهذا الرقم','تأكد من رقم الترشح <b>'+esc(num)+'</b> كما في بطاقة الامتحان وحاول مجددًا.');return;}
-    renderResult(data[0]);
-  }catch(e){
-    setLoading(false);
-    showMsg('err','تعذّر جلب النتيجة','حدث خطأ في الاتصال. تأكد من الإنترنت وحاول مرة أخرى.');
-  }
-}
-
-(function(){
-  try{
-    const params=new URLSearchParams(location.search);
-    const n=params.get('n');
-    if(n){const clean=n.replace(/[^0-9]/g,'');if(clean){document.getElementById('searchInput').value=clean;searchResult(clean);}}
-  }catch(e){}
-})();
 </script>
 <script src="components.js"></script>
 </body>
