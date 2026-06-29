@@ -7,7 +7,8 @@
 <title>شهادة ختم الدروس الإعدادية (بريفيه) 2026 · نتائجنا</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600;800&display=swap" rel="stylesheet"></noscript>
 <style>
 :root{
   --bg:#f7faf9;
@@ -218,7 +219,6 @@ body.concours{--ln:var(--t2);--ln-soft:var(--t2s);--ln-line:var(--t2l)}
 @media(max-width:520px){.rc-name{font-size:1.18rem}.rc-head{gap:10px}}
 </style>
 
-<script src="components.js"></script>
 </head>
 <body class="brevet">
 <div class="bg-layer"><div class="bg-orb orb-1"></div><div class="bg-orb orb-2"></div><div class="bg-orb orb-3"></div></div>
@@ -445,5 +445,6 @@ async function searchResult(num){
   }catch(e){}
 })();
 </script>
+<script src="components.js"></script>
 </body>
 </html>
