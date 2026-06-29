@@ -8,7 +8,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 :root{
   --bg:#f7faf9;
@@ -383,7 +382,10 @@ function copyLink(nodoss){
 async function shareImage(){
   const card=document.getElementById('rcCard');
   const btn=document.getElementById('shareImgBtn');
-  if(!card||typeof html2canvas==='undefined'){toast('تعذّر إنشاء الصورة');return;}
+  if(!card){toast('تعذّر إنشاء الصورة');return;}
+  if(typeof html2canvas==='undefined'){
+    await new Promise((res,rej)=>{const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';s.onload=res;s.onerror=rej;document.head.appendChild(s);});
+  }
   const orig=btn.innerHTML;
   btn.disabled=true;btn.innerHTML='<span class="sb-spin"></span> جارٍ التجهيز';
   const dark=document.documentElement.getAttribute('data-theme')==='dark';
