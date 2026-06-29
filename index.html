@@ -25,22 +25,15 @@
   --green-deep:#019866;
   --green-soft:#e7f7f0;
   --green-line:#bfe9d8;
-  /* أخضر إحصائيات أفتح وأكثر إيجابية — لون الخط فقط */
-  --stat-green:#0fbf8a;
   --gold-soft:rgba(245,180,1,.12);
-  /* لون الهوية الرسمي #00b775 — الأخضر بصمة maurinote */
-  --brand:#00b775;
-  /* الزخرفة موحّدة على الأسود والأخضر، الأخضر لمسة لا غالب */
   --t1:#00b775; --t1s:#e7f7f0; --t1l:#bfe9d8;
   --t2:#019866; --t2s:#e7f7f0; --t2l:#bfe9d8;
   --t3:#16201d; --t3s:#f1f3f2; --t3l:#dfe3e2;
   --t4:#56615d; --t4s:#f1f3f2; --t4l:#dfe3e2;
-  /* وظيفية فقط: تحذير ونجاح/فشل */
   --amber:#d97706; --amber-soft:#fef3e2; --amber-line:#f6dcb0;
   --red:#dc2626; --red-soft:#fdecec; --red-line:#f6c9c9;
   --mint:#00b775; --mint-soft:#e7f7f0; --mint-deep:#019866;
   --beige:#16201d; --beige-soft:#f1f3f2; --beige-line:#dfe3e2;
-  --navy:#16201d;
   --radius:18px;
   --maxw:1320px;
 }
@@ -58,9 +51,7 @@
   --green-deep:#19b67e;
   --green-soft:#0c3328;
   --green-line:#1c5340;
-  --stat-green:#46e0ad;
   --gold-soft:rgba(245,180,1,.10);
-  --brand:#1fcb8d;
   --t1:#1fcb8d; --t1s:#0c3328; --t1l:#1c5340;
   --t2:#19b67e; --t2s:#0c3328; --t2l:#1c5340;
   --t3:#e9f2ef; --t3s:#1a2826; --t3l:#31453f;
@@ -69,7 +60,6 @@
   --red:#f87171; --red-soft:#3a1c1c; --red-line:#5e2a2a;
   --mint:#1fcb8d; --mint-soft:#0c3328; --mint-deep:#7fd9b5;
   --beige:#e9f2ef; --beige-soft:#1a2826; --beige-line:#31453f;
-  --navy:#0c2820;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth;overflow-x:hidden;max-width:100%}
@@ -96,8 +86,6 @@ header.scrolled{background:color-mix(in srgb,var(--panel) 85%,transparent)}
 .brand-name{font-weight:700;font-size:1.18rem;letter-spacing:-.01em;color:var(--ink)}
 .brand-name span{color:var(--green)}
 .brand-sub{font-size:.72rem;color:var(--ink-3);font-weight:400}
-/* ===== هوية maurinote: العلامة الكاملة والرمز ===== */
-/* ===== هوية maurinote: العلامة الرسمية كما هي ===== */
 .nav{position:relative}
 .brand-icon-link{flex:1 1 0;display:flex;align-items:center;justify-content:flex-start;flex-shrink:1;line-height:0}
 .brand-icon{width:42px;height:42px;display:block;border-radius:13px;box-shadow:0 8px 18px -8px rgba(0,183,117,.55)}
@@ -164,13 +152,11 @@ header.scrolled{background:color-mix(in srgb,var(--panel) 85%,transparent)}
 .lane.bac{--ln:var(--green-deep);--ln-soft:var(--green-soft);--ln-line:var(--green-line)}
 .lane.brevet{--ln:var(--green-deep);--ln-soft:var(--beige-soft);--ln-line:var(--beige-line)}
 .lane.concours{--ln:var(--t2);--ln-soft:var(--t2s);--ln-line:var(--t2l)}
-/* بطاقات قريبا: تبدو غير فعّالة */
 .lane[aria-disabled="true"]{cursor:default;opacity:.62;background:var(--panel-2);border-color:var(--line)}
 .lane[aria-disabled="true"]:hover{transform:none;box-shadow:0 1px 2px rgba(22,32,29,.04);border-color:var(--line)}
 .lane[aria-disabled="true"]:hover::before{width:5px}
 .lane[aria-disabled="true"] .lane-title{color:var(--ink-2)}
 .lane[aria-disabled="true"] .lane-abbr-box{color:var(--ink-3);background:var(--panel);border-color:var(--line)}
-/* روابط قريبا في التذييل: غير فعّالة */
 .foot-col a[aria-disabled="true"]{color:var(--ink-3);opacity:.55;cursor:default;pointer-events:none}
 
 /* sections */
@@ -479,7 +465,7 @@ footer{border-top:1px solid var(--line);padding:46px 0 28px;position:relative;z-
   <div class="wrap">
     <div class="sec-head"><div class="sec-tag">مساعدة</div><h2>أسئلة شائعة</h2></div>
     <div class="faq-list">
-      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">ما هي المسابقات المتاحة على المنصة؟ <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></button><div class="faq-a"><p>تعرض المنصة نتائج الباكالوريا، وختم الدروس الإعدادية (بريفيه)، ومسابقة دخول الإعدادية (كونكور). لكل مسابقة صفحة مستقلة بنتائجها.</p></div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">ما هي المسابقات المتاحة على المنصة؟ <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></button><div class="faq-a"><p>تعرض المنصة نتائج الباكالوريا، وختم الدروس الإعدادية ، ومسابقة دخول الإعدادية (كونكور). لكل مسابقة صفحة مستقلة بنتائجها.</p></div></div>
       <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">كيف أبحث عن نتيجتي؟ <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></button><div class="faq-a"><p>اضغط على المسابقة التي تريدها من القائمة بالأعلى، ستنتقل إلى صفحتها الخاصة حيث تُدخل رقم ترشحك وتعرض نتيجتك.</p></div></div>
       <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">أين أجد رقم الترشح؟ <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></button><div class="faq-a"><p>رقم الترشح مدون في استمارة التسجيل وفي بطاقة دخول الامتحان، وهو خاص بك طوال الدورة.</p></div></div>
       <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">هل استخدام المنصة مجاني؟ <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></button><div class="faq-a"><p>نعم، جميع الخدمات مجانية بالكامل، خدمةً للطالب الموريتاني.</p></div></div>
@@ -574,21 +560,15 @@ footer{border-top:1px solid var(--line);padding:46px 0 28px;position:relative;z-
     </g>
   </g>
 </svg></span>
-        <p>maurinote منصة موريتانية تَسنُد الطالب في مساره: نتائج المسابقات الوطنية ومواعيدها، وأدوات وخدمات ترافقه خطوة بخطوة — لا تقف عند عرض النتائج.</p>
+        <p>maurinote منصة موريتانية تَسنُد الطالب في مساره: نتائج المسابقات الوطنية ومواعيدها، وأدوات وخدمات ترافقه خطوة بخطوة — لا تقف عند عرض النتائج</p>
       </div>
-      <div class="foot-col">
-        <h5>المسابقات</h5>
-        <a href="bac25.html">الباكالوريا</a>
-        <a href="brevet25.html">ختم الدروس الإعدادية</a>
-        <a href="concours25.html">دخول الإعدادية</a>
-      </div>
+
     </div>
     <div class="foot-bottom">© 2026 <b>maurinote</b> · · جميع الحقوق محفوظة</div>
   </div>
 </footer>
 
 <script>
-/* ===== Competitions: each links to its own page ===== */
 const COMPS=[
   {
     key:'bac', cls:'bac', href:'bac25.html', abbr:'BAC',
@@ -597,7 +577,7 @@ const COMPS=[
   },
   {
     key:'brevet', cls:'brevet', href:'brevet25.html', abbr:'BREVET',
-    title:'شهادة ختم الدروس الإعدادية (بريفيه) 2025',
+    title:'شهادة ختم الدروس الإعدادية 2025',
     state:'live', stateTxt:'النتائج متاحة'
   },
   {
@@ -623,7 +603,6 @@ function buildLanes(){
 }
 buildLanes();
 
-/* THEME */
 function applyTheme(t){if(t==='dark')document.documentElement.setAttribute('data-theme','dark');else document.documentElement.removeAttribute('data-theme');}
 function toggleTheme(){const cur=document.documentElement.getAttribute('data-theme')==='dark'?'dark':'light';const next=cur==='dark'?'light':'dark';applyTheme(next);try{localStorage.setItem('theme',next);}catch(e){}}
 (function(){let t=null;try{t=localStorage.getItem('theme');}catch(e){}applyTheme(t==='dark'?'dark':'light');})();
@@ -631,110 +610,8 @@ window.addEventListener('scroll',()=>{document.getElementById('hdr').classList.t
 
 function toggleFaq(btn){const item=btn.parentElement,ans=item.querySelector('.faq-a'),open=item.classList.contains('open');document.querySelectorAll('.faq-item').forEach(i=>{i.classList.remove('open');i.querySelector('.faq-a').style.maxHeight=null;});if(!open){item.classList.add('open');ans.style.maxHeight=ans.scrollHeight+'px';}}
 
-/* ===== NOTIFY SIGNUP (Supabase) ===== */
-/* ⬇⬇⬇ بدّل هذين السطرين بمفاتيح مشروعك في Supabase ⬇⬇⬇ */
-const SUPABASE_URL = 'https://eqwubmnzgjdfknlazdqi.supabase.co';     // مثال: https://abcdxyz.supabase.co
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVxd3VibW56Z2pkZmtubGF6ZHFpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxMTYwMjEsImV4cCI6MjA5NzY5MjAyMX0._m_VBuoJvZoLM6rxhmi0BpCH224p3DnVgJZrPtq5LY4';    // المفتاح العام anon
-/* ⬆⬆⬆ الجدول المتوقع: notify_signups (name, email) ⬆⬆⬆ */
-
-
-/* يخفي القيم المشوّهة (التي تحوي رمز الاستبدال �) */
-function clean(s){ return (s||'').replace(/\uFFFD/g,'').trim(); }
-function isBad(s){ return !s || /\uFFFD/.test(s); }
-
-function renderBacStats(d){
-  const o=d.overview||{};
-  const failed = Number(o.failed||0) + Number(o.session||0); /* لم ينجح = راسب + تكميلية */
-
-  /* شريط الأرقام */
-  document.getElementById('kPassRate').textContent=fmtPct(o.pass_rate);
-  document.getElementById('kPassed').textContent=fmtInt(o.passed);
-  document.getElementById('kFailed').textContent=fmtInt(failed);
-  document.getElementById('kPresent').textContent=fmtInt(o.total_candidates!=null?o.total_candidates:o.present);
-
-  /* لون بطاقة نسبة النجاح حسب قيمتها */
-  document.getElementById('kpiRate').classList.add('rate-'+rateClass(o.pass_rate));
-
-  renderWilayas(d.by_wilaya||[]);
-  renderTops(d.top_students||d.tops||d.top3_by_serie||[]);
-}
-
-/* الولايات — أعلى 5 نسبةَ نجاح، مع ذكر الترتيب وجملة موحّدة */
-function renderWilayas(rows){
-  const el=document.getElementById('wilayaList'); if(!el) return;
-  const clean_rows=rows
-    .filter(r=>!isBad(r.wilaya))
-    .sort((a,b)=>Number(b.passed||0)-Number(a.passed||0))
-    .slice(0,5);
-  el.innerHTML=clean_rows.map((r,i)=>{
-    const present=Number(r.present||0), passed=Number(r.passed||0);
-    const pct=Number(r.pass_rate||0);
-    const cls=rateClass(pct);
-    return '<div class="wrow">'+
-      '<div class="wrow-top">'+
-        '<span class="wrow-name"><span class="wrank">'+(i+1)+'</span>'+clean(r.wilaya)+'</span>'+
-        '<span class="wrow-rate '+cls+'">'+fmtPct(pct)+'</span>'+
-      '</div>'+
-      '<div class="wbar '+cls+'"><div class="wbar-pass" data-w="'+pct.toFixed(1)+'"></div></div>'+
-      '<div class="wrow-sub"><b>'+fmtInt(passed)+'</b> ناجح من أصل '+fmtInt(present)+' طالباً</div>'+
-    '</div>';
-  }).join('');
-  requestAnimationFrame(()=>requestAnimationFrame(()=>{
-    el.querySelectorAll('.wbar-pass').forEach(b=>{ b.style.width=b.dataset.w+'%'; });
-  }));
-}
-
-/* الأوائل في الشُّعب الثلاث (SN / M / LO) — لكل شعبة بطاقة مستقلة وإبراز المركز الأول */
-function renderTops(rows){
-  const el=document.getElementById('topsList'); if(!el) return;
-  const TRACKS=[
-    {key:'SN', cls:'tk-sn', name:'العلوم الطبيعية'},
-    {key:'M',  cls:'tk-m',  name:'الرياضيات'},
-    {key:'LO', cls:'tk-lo', name:'الآداب الأصلية'}
-  ];
-  /* تطبيع المفاتيح — يقبل تسميات متعددة قد تأتي من قاعدة البيانات */
-  const norm=(rows||[]).map(r=>({
-    serie:  String(r.serie ?? r.track ?? r.filiere ?? r.section ?? r.shuba ?? '').toUpperCase().trim(),
-    rang:   Number(r.rang ?? r.rank ?? r.position ?? r.ordre ?? 0),
-    nom:    clean(r.nom ?? r.name ?? r.etudiant ?? r.student ?? ''),
-    etab:   clean(r.etab ?? r.school ?? r.ecole ?? r.etablissement ?? ''),
-    wilaya: clean(r.wilaya ?? r.state ?? ''),
-    moy:    (r.moy ?? r.moyenne ?? r.average ?? r.avg ?? r.note)
-  })).filter(r=>r.nom && !isBad(r.nom));
-
-  let html='', any=false;
-  TRACKS.forEach(t=>{
-    let list=norm.filter(r=>r.serie===t.key);
-    list.sort((a,b)=> (a.rang&&b.rang) ? a.rang-b.rang : (Number(b.moy||0)-Number(a.moy||0)));
-    list=list.slice(0,3);
-    if(!list.length) return;
-    any=true;
-    html+='<div class="top-track '+t.cls+'">'+
-      '<div class="top-track-head">'+
-        '<span class="top-abbr">'+t.key+'</span>'+
-        '<span class="top-track-name">'+t.name+'<span class="cnt">أعلى 3 معدلات</span></span>'+
-      '</div>'+
-      '<div class="top-rows">'+
-        list.map((r,i)=>{
-          const rank=r.rang||(i+1);
-          const moy=(r.moy==null||r.moy==='')?'—':Number(r.moy).toFixed(2);
-          const meta=[r.etab,r.wilaya].filter(Boolean).join('<span class="sep">·</span>');
-          return '<div class="top-row r'+(i+1)+'">'+
-            '<span class="top-medal">'+rank+'</span>'+
-            '<span class="top-info">'+
-              '<span class="top-name">'+(r.nom||'—')+'</span>'+
-              (meta?'<span class="top-meta">'+meta+'</span>':'')+
-            '</span>'+
-            '<span class="top-moy"><span class="v">'+moy+'</span><span class="l">المعدل</span></span>'+
-          '</div>';
-        }).join('')+
-      '</div>'+
-    '</div>';
-  });
-  el.innerHTML = any ? html : '<div class="tops-empty">سيظهر الأوائل فور توفّر بياناتهم في قاعدة البيانات.</div>';
-}
-
-document.addEventListener('DOMContentLoaded', loadBacStats);
+const SUPABASE_URL = 'https://eqwubmnzgjdfknlazdqi.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVxd3VibW56Z2pkZmtubGF6ZHFpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxMTYwMjEsImV4cCI6MjA5NzY5MjAyMX0._m_VBuoJvZoLM6rxhmi0BpCH224p3DnVgJZrPtq5LY4';
 
 function showNfMsg(type, text){
   const el = document.getElementById('nfMsg');
@@ -822,7 +699,6 @@ async function submitNotify(){
   }
 }
 
-/* إرسال بالضغط على Enter داخل الحقول */
 ['nfName','nfEmail'].forEach(id=>{
   document.getElementById(id).addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); submitNotify(); }});
 });
