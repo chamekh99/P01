@@ -190,14 +190,6 @@ section{padding:56px 0;position:relative}
 .nf-select-wrap select{appearance:none;-webkit-appearance:none;-moz-appearance:none;cursor:pointer;padding-left:38px}
 .nf-select-wrap select:invalid{color:var(--ink-3)}
 .nf-select-arrow{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--ink-3);pointer-events:none}
-.nf-check{display:flex;align-items:flex-start;gap:9px;cursor:pointer;padding:2px 0;user-select:none}
-.nf-check input{position:absolute;opacity:0;width:0;height:0}
-.nf-check-box{width:20px;height:20px;flex-shrink:0;border:1.5px solid var(--line-2);border-radius:6px;background:var(--panel-2);display:grid;place-items:center;transition:.18s;margin-top:1px}
-.nf-check-box svg{width:13px;height:13px;color:#fff;opacity:0;transform:scale(.5);transition:.18s}
-.nf-check input:checked+.nf-check-box{background:var(--green);border-color:var(--green)}
-.nf-check input:checked+.nf-check-box svg{opacity:1;transform:scale(1)}
-.nf-check input:focus-visible+.nf-check-box{box-shadow:0 0 0 3px var(--green-soft)}
-.nf-check-txt{font-size:.82rem;color:var(--ink-2);font-weight:400;line-height:1.55}
 .nf-submit{font-family:inherit;font-size:.95rem;font-weight:700;color:#fff;background:var(--green);border:none;border-radius:11px;padding:13px 24px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:9px;transition:.2s;margin-top:2px}
 .nf-submit svg{width:18px;height:18px;transition:.2s}
 .nf-submit:hover:not(:disabled){background:var(--green-deep);transform:translateY(-1px)}
@@ -327,7 +319,7 @@ footer{border-top:1px solid var(--line);padding:46px 0 28px;position:relative;z-
                 <option value="" disabled selected>اختر المسابقة</option>
                 <option value="bac">الباكالوريا</option>
                 <option value="brevet">ختم الدروس الإعدادية </option>
-                <option value="concours">دخول الإعدادية (كونكور)</option>
+                <option value="concours">دخول الإعدادية</option>
               </select>
               <svg class="nf-select-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
             </div>
@@ -341,12 +333,6 @@ footer{border-top:1px solid var(--line);padding:46px 0 28px;position:relative;z-
           </label>
           <input type="email" id="nfEmail" placeholder="example@email.com" autocomplete="email" maxlength="120" dir="ltr" style="text-align:right">
         </div>
-
-        <label class="nf-check" for="nfUpdates">
-          <input type="checkbox" id="nfUpdates">
-          <span class="nf-check-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
-          <span class="nf-check-txt">أوافق على تلقّي إشعارات بالتحديثات.</span>
-        </label>
 
         <div class="nf-msg" id="nfMsg"></div>
 
@@ -536,7 +522,6 @@ function setNfLoading(on){
   document.getElementById('nfName').disabled=on;
   document.getElementById('nfEmail').disabled=on;
   document.getElementById('nfComp').disabled=on;
-  document.getElementById('nfUpdates').disabled=on;
   if(on){ txt.textContent='جارٍ التسجيل…'; ic.outerHTML='<span class="nf-spin" id="nfSubmitIcon"></span>'; }
   else{ txt.textContent='إرسال'; document.getElementById('nfSubmitIcon').outerHTML='<svg id="nfSubmitIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>'; }
 }
@@ -548,8 +533,6 @@ async function submitNotify(){
   const name=document.getElementById('nfName').value.trim();
   const email=document.getElementById('nfEmail').value.trim();
   const comp=document.getElementById('nfComp').value;
-  const wantsUpdates=document.getElementById('nfUpdates').checked;
-
   if(name.length<2){ showNfMsg('err','يرجى إدخال اسمك الكامل.'); document.getElementById('nfName').focus(); return; }
   if(!comp){ showNfMsg('err','يرجى اختيار المسابقة التي تريد إشعاراً بنتيجتها.'); document.getElementById('nfComp').focus(); return; }
   if(!validEmail(email)){ showNfMsg('err','يرجى إدخال بريد إلكتروني صحيح.'); document.getElementById('nfEmail').focus(); return; }
@@ -570,7 +553,7 @@ async function submitNotify(){
         'Authorization':'Bearer '+SUPABASE_ANON_KEY,
         'Prefer':'return=minimal'
       },
-      body:JSON.stringify({ name:name, email:email, competition:comp, wants_updates:wantsUpdates })
+      body:JSON.stringify({ name:name, email:email, competition:comp })
     });
 
     if(res.ok){
@@ -578,12 +561,10 @@ async function submitNotify(){
       document.getElementById('nfName').value='';
       document.getElementById('nfEmail').value='';
       document.getElementById('nfComp').value='';
-      document.getElementById('nfUpdates').checked=false;
       setNfLoading(false);
       document.getElementById('nfName').disabled=true;
       document.getElementById('nfEmail').disabled=true;
       document.getElementById('nfComp').disabled=true;
-      document.getElementById('nfUpdates').disabled=true;
       document.getElementById('nfSubmit').disabled=true;
       document.getElementById('nfSubmitText').textContent='تم التسجيل ✓';
       return;
