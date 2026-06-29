@@ -317,9 +317,9 @@ footer{border-top:1px solid var(--line);padding:46px 0 28px;position:relative;z-
             <div class="nf-select-wrap">
               <select id="nfComp">
                 <option value="" disabled selected>اختر المسابقة</option>
-                <option value="bac">الباكالوريا</option>
-                <option value="brevet">ختم الدروس الإعدادية </option>
-                <option value="concours">دخول الإعدادية</option>
+                <option value="bac">شهادة البكالوريا – الدورة العادية 2025</option>
+                <option value="brevet">شهادة ختم الدروس الإعدادية 2025</option>
+                <option value="concours">مسابقة دخول السنة الأولى الإعدادية 2025</option>
               </select>
               <svg class="nf-select-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
             </div>
@@ -357,7 +357,7 @@ footer{border-top:1px solid var(--line);padding:46px 0 28px;position:relative;z-
   <div class="wrap">
     <div class="sec-head"><div class="sec-tag">مساعدة</div><h2>أسئلة شائعة</h2></div>
     <div class="faq-list">
-      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">ما هي المسابقات المتاحة على المنصة؟ <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></button><div class="faq-a"><p>تعرض المنصة نتائج الباكالوريا، وختم الدروس الإعدادية ، ومسابقة دخول الإعدادية (كونكور). لكل مسابقة صفحة مستقلة بنتائجها.</p></div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">ما هي المسابقات المتاحة على المنصة؟ <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></button><div class="faq-a"><p>تعرض المنصة نتائج شهادة البكالوريا، وشهادة ختم الدروس الإعدادية، ومسابقة دخول السنة الأولى الإعدادية. لكل مسابقة صفحة مستقلة بنتائجها.</p></div></div>
       <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">كيف أبحث عن نتيجتي؟ <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></button><div class="faq-a"><p>اضغط على المسابقة التي تريدها من القائمة بالأعلى، ستنتقل إلى صفحتها الخاصة حيث تُدخل رقم ترشحك وتعرض نتيجتك.</p></div></div>
       <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">أين أجد رقم الترشح؟ <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></button><div class="faq-a"><p>رقم الترشح مدون في استمارة التسجيل وفي بطاقة دخول الامتحان، وهو خاص بك طوال الدورة.</p></div></div>
       <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">هل استخدام المنصة مجاني؟ <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></button><div class="faq-a"><p>نعم، جميع الخدمات مجانية بالكامل، خدمةً للطالب الموريتاني.</p></div></div>
@@ -464,7 +464,7 @@ footer{border-top:1px solid var(--line);padding:46px 0 28px;position:relative;z-
 const COMPS=[
   {
     key:'bac', cls:'bac', href:'bac25.html', abbr:'BAC',
-    title:'شهادة الباكالوريا — الدورة العادية 2025',
+    title:'شهادة البكالوريا – الدورة العادية 2025',
     state:'live', stateTxt:'النتائج متاحة'
   },
   {
@@ -474,7 +474,7 @@ const COMPS=[
   },
   {
     key:'concours', cls:'concours', href:'concours25.html', abbr:'CONCOURS',
-    title:'مسابقة دخول الإعدادية (كونكور) 2025',
+    title:'مسابقة دخول السنة الأولى الإعدادية 2025',
     state:'live', stateTxt:'النتائج متاحة'
   }
 ];
