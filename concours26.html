@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20109.14%20137.14%27%3E%3Crect%20y%3D%2755.41%27%20width%3D%27109.14%27%20height%3D%2739.58%27%20fill%3D%27%23fc0%27%2F%3E%3Crect%20x%3D%2739.94%27%20y%3D%27111.71%27%20width%3D%2769.2%27%20height%3D%2725.43%27%20fill%3D%27%23fb275d%27%2F%3E%3Ccircle%20cx%3D%2289.8%27%20cy%3D%2719.34%27%20r%3D%2719.34%27%20fill%3D%27%2300b775%27%2F%3E%3C%2Fsvg%3E">
-<title>مسابقة دخول السنة الأولى الإعدادية 2026 · نتائجنا</title>
+<title>مسابقة دخول السنة الأولى الإعدادية 2024 · نتائجنا</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -232,6 +232,7 @@ body.concours{--ln:var(--t2);--ln-soft:var(--t2s);--ln-line:var(--t2l)}
 .student-item{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 12px;border-radius:8px;border:none;background:transparent;cursor:pointer;text-align:right;transition:.15s;font-family:inherit}
 .student-item:hover{background:var(--ln-soft)}
 .st-name{font-size:.88rem;font-weight:600;color:var(--ink);flex:1;min-width:0;word-break:break-word;text-align:right;line-height:1.4}
+.st-num{flex-shrink:0;min-width:30px;height:24px;padding:0 7px;display:inline-flex;align-items:center;justify-content:center;border-radius:7px;background:var(--ln-soft);color:var(--ln);border:1px solid var(--ln-line);font-size:.78rem;font-weight:700;direction:ltr}
 .st-total{font-size:.82rem;font-weight:700;color:var(--ink-3);flex-shrink:0;direction:ltr;white-space:nowrap}
 .st-empty,.st-loading{padding:16px;text-align:center;color:var(--ink-3);font-size:.86rem;display:flex;align-items:center;justify-content:center;gap:8px}
 .st-spin{width:16px;height:16px;border:2px solid var(--line-2);border-top-color:var(--ln);border-radius:50%;animation:rcspin .7s linear infinite;flex-shrink:0}
@@ -247,7 +248,7 @@ body.concours{--ln:var(--t2);--ln-soft:var(--t2s);--ln-line:var(--t2l)}
   <div class="wrap">
     <div class="back-row"><a class="back-link" href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> الرجوع</a></div>
     <div style="text-align:center">
-      <h1>مسابقة دخول السنة الأولى الإعدادية 2026<span class="page-sub">الكونكور</span></h1>
+      <h1>مسابقة دخول السنة الأولى الإعدادية 2024<span class="page-sub">الكونكور</span></h1>
     </div>
   </div>
 </section>
@@ -256,7 +257,7 @@ body.concours{--ln:var(--t2);--ln-soft:var(--t2s);--ln-line:var(--t2l)}
   <div class="wrap">
     <div class="finder">
       <h3>ابحث عن نتيجتك</h3>
-      <p class="finder-sub">اختر الولاية ثم المدرسة ثم ابحث عن اسمك</p>
+      <p class="finder-sub">اختر الولاية ثم المقاطعة ثم المدرسة ثم ابحث عن اسمك</p>
       <div class="steps-wrap">
 
         <div class="step-group">
@@ -264,6 +265,16 @@ body.concours{--ln:var(--t2);--ln-soft:var(--t2s);--ln-line:var(--t2l)}
           <div class="sel-wrap">
             <select id="selWilaya" onchange="onWilayaChange()">
               <option value="" disabled selected>جارٍ التحميل…</option>
+            </select>
+            <svg class="sel-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
+        </div>
+
+        <div class="step-group" id="stepMoughata" hidden>
+          <label class="step-lbl" for="selMoughata">المقاطعة</label>
+          <div class="sel-wrap">
+            <select id="selMoughata" onchange="onMoughataChange()">
+              <option value="" disabled selected>— اختر المقاطعة —</option>
             </select>
             <svg class="sel-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
           </div>
@@ -299,7 +310,7 @@ body.concours{--ln:var(--t2);--ln-soft:var(--t2s);--ln-line:var(--t2l)}
 function applyTheme(t){if(t==='dark')document.documentElement.setAttribute('data-theme','dark');else document.documentElement.removeAttribute('data-theme');}
 function toggleTheme(){const cur=document.documentElement.getAttribute('data-theme')==='dark'?'dark':'light';const next=cur==='dark'?'light':'dark';applyTheme(next);try{localStorage.setItem('theme',next);}catch(e){}}
 (function(){let t=null;try{t=localStorage.getItem('theme');}catch(e){}applyTheme(t==='dark'?'dark':'light');})();
-window.addEventListener('scroll',()=>{document.getElementById('hdr').classList.toggle('scrolled',window.scrollY>10);});
+window.addEventListener('scroll',()=>{const h=document.getElementById('hdr');if(h)h.classList.toggle('scrolled',window.scrollY>10);});
 
 /* ════════════════════════════════════════════════════════
    مصدر البيانات: ملفات JSON ثابتة في مجلد data/
@@ -317,7 +328,7 @@ function cleanDisplay(s){return(s||'').replace(/ـ/g,'').replace(/\s+/g,' ').tri
 let _wilayaFiles={};
 /* كاش: ملف ولاية حُمّل مرة لا يُعاد تحميله */
 let _wilayaCache={};
-/* طلاب المدرسة المختارة حالياً */
+/* طلاب المدرسة المختارة حالياً (مرقّمين) */
 let _students=[];
 
 /* ── الخطوة 1: تحميل قائمة الولايات عند فتح الصفحة (ملف خفيف ~2KB) ── */
@@ -348,24 +359,58 @@ async function fetchWilaya(wRaw){
   const r=await fetch(DATA_DIR+'/'+id+'.json');
   if(!r.ok)throw new Error('HTTP '+r.status);
   const data=await r.json();
-  _wilayaCache[wRaw]=data.students;     // [{nom,ecole,moughata,total}, ...]
+  _wilayaCache[wRaw]=data.students;     // [{nom,ecole,moughata,total}, ...] بترتيب القائمة الأصلي
   return data.students;
 }
 
-/* ── الخطوة 2: اختيار الولاية → تحميل ملفها واستخراج مدارسها ── */
+/* إخفاء الخطوات الأدنى عند تغيير خطوة أعلى */
+function resetFrom(level){
+  if(level<=2){const m=document.getElementById('selMoughata');m.innerHTML='<option value="" disabled selected>— اختر المقاطعة —</option>';m.disabled=true;document.getElementById('stepMoughata').hidden=true;}
+  if(level<=3){const e=document.getElementById('selEcole');e.innerHTML='<option value="" disabled selected>— اختر المدرسة —</option>';e.disabled=true;document.getElementById('stepEcole').hidden=true;}
+  if(level<=4){document.getElementById('stepStudents').hidden=true;_students=[];}
+  hideAll();
+}
+
+/* ── الخطوة 2: اختيار الولاية → تحميل ملفها واستخراج مقاطعاتها ── */
 async function onWilayaChange(){
   const w=document.getElementById('selWilaya').value;
   if(!w)return;
-  hideAll();
-  document.getElementById('stepStudents').hidden=true;
-  const ecoleGroup=document.getElementById('stepEcole');
-  const sel=document.getElementById('selEcole');
-  ecoleGroup.hidden=false;
+  resetFrom(2);
+  const grp=document.getElementById('stepMoughata');
+  const sel=document.getElementById('selMoughata');
+  grp.hidden=false;
   sel.innerHTML='<option value="" disabled selected>جارٍ التحميل…</option>';
   sel.disabled=true;
   try{
     const students=await fetchWilaya(w);
-    const ecoles=[...new Set(students.map(s=>s.ecole).filter(Boolean))].sort((a,b)=>cleanDisplay(a).localeCompare(cleanDisplay(b),'ar'));
+    // مقاطعات فريدة (بالاسم الأصلي، تُعرض نظيفة)
+    const seen=new Set(),moughatas=[];
+    students.forEach(s=>{if(s.moughata&&!seen.has(s.moughata)){seen.add(s.moughata);moughatas.push(s.moughata);}});
+    moughatas.sort((a,b)=>cleanDisplay(a).localeCompare(cleanDisplay(b),'ar'));
+    sel.innerHTML='<option value="" disabled selected>— اختر المقاطعة —</option>';
+    moughatas.forEach(m=>{const o=document.createElement('option');o.value=m;o.textContent=cleanDisplay(m);sel.appendChild(o);});
+    sel.disabled=false;
+  }catch(e){
+    sel.innerHTML='<option value="" disabled selected>تعذّر التحميل</option>';
+    sel.disabled=false;
+  }
+}
+
+/* ── الخطوة 3: اختيار المقاطعة → استخراج مدارسها ── */
+async function onMoughataChange(){
+  const w=document.getElementById('selWilaya').value;
+  const m=document.getElementById('selMoughata').value;
+  if(!w||!m)return;
+  resetFrom(3);
+  const grp=document.getElementById('stepEcole');
+  const sel=document.getElementById('selEcole');
+  grp.hidden=false;
+  sel.innerHTML='<option value="" disabled selected>جارٍ التحميل…</option>';
+  sel.disabled=true;
+  try{
+    const students=await fetchWilaya(w);   // من الكاش غالباً
+    const ecoles=[...new Set(students.filter(s=>s.moughata===m).map(s=>s.ecole).filter(Boolean))]
+      .sort((a,b)=>cleanDisplay(a).localeCompare(cleanDisplay(b),'ar'));
     sel.innerHTML='<option value="" disabled selected>— اختر المدرسة —</option>';
     ecoles.forEach(e=>{const o=document.createElement('option');o.value=e;o.textContent=cleanDisplay(e);sel.appendChild(o);});
     sel.disabled=false;
@@ -375,24 +420,25 @@ async function onWilayaChange(){
   }
 }
 
-/* ── الخطوة 3: اختيار المدرسة → تصفية الطلاب (من الذاكرة، فوري) ── */
+/* ── الخطوة 4: اختيار المدرسة → ترقيم الطلاب وعرضهم (من الذاكرة، فوري) ──
+   الرقم = ترتيب الطالب داخل قائمة مدرسته بالترتيب الأصلي للملف (كما في القوائم الرسمية). */
 async function onEcoleChange(){
   const w=document.getElementById('selWilaya').value;
+  const m=document.getElementById('selMoughata').value;
   const ec=document.getElementById('selEcole').value;
-  if(!w||!ec)return;
+  if(!w||!m||!ec)return;
   hideAll();
-  const studGroup=document.getElementById('stepStudents');
+  document.getElementById('stepStudents').hidden=false;
   const list=document.getElementById('studentList');
   const filterIn=document.getElementById('studentFilter');
   filterIn.value='';
-  studGroup.hidden=false;
   list.innerHTML='<div class="st-loading"><span class="st-spin"></span> جارٍ التحميل…</div>';
   try{
     const students=await fetchWilaya(w);   // من الكاش غالباً
+    let n=0;
     _students=students
-      .filter(s=>s.ecole===ec)
-      .map(s=>({Nom:s.nom,Total:s.total}))   // نفس أسماء الحقول التي تتوقعها دوال العرض
-      .sort((a,b)=>cleanDisplay(a.Nom||'').localeCompare(cleanDisplay(b.Nom||''),'ar'));
+      .filter(s=>s.moughata===m&&s.ecole===ec)   // مقاطعة + مدرسة معاً (أسماء المدارس قد تتكرر بين المقاطعات)
+      .map(s=>({Num:++n,Nom:s.nom,Total:s.total}));  // الترقيم بترتيب القائمة الأصلي
     renderStudentList(_students);
   }catch(e){
     list.innerHTML='<div class="st-empty">تعذّر تحميل الطلاب — حدّث الصفحة</div>';
@@ -402,14 +448,15 @@ async function onEcoleChange(){
 function filterStudents(){
   const q=document.getElementById('studentFilter').value.trim();
   if(!q){renderStudentList(_students);return;}
-  renderStudentList(_students.filter(r=>cleanDisplay(r['Nom']||'').includes(q)));
+  renderStudentList(_students.filter(r=>cleanDisplay(r['Nom']||'').includes(q)||String(r['Num']).includes(q)));
 }
 
 function renderStudentList(rows){
   const list=document.getElementById('studentList');
   if(!rows.length){list.innerHTML='<div class="st-empty">لا يوجد اسم مطابق</div>';return;}
-  list.innerHTML=rows.map((r,i)=>
-    '<button class="student-item" onclick="showStudent('+i+')">'+
+  list.innerHTML=rows.map(r=>
+    '<button class="student-item" onclick="showStudent('+(r['Num']-1)+')">'+
+      '<span class="st-num">'+r['Num']+'</span>'+
       '<span class="st-name">'+esc(cleanDisplay(r['Nom']||'—'))+'</span>'+
       '<span class="st-total">'+(r['Total']!=null?r['Total']:'—')+'</span>'+
     '</button>'
@@ -426,7 +473,9 @@ function renderConcours(r){
   const totalStr=totalNum!=null?totalNum:'—';
   const pct=totalNum!=null?Math.max(0,Math.min(100,(totalNum/200)*100)):0;
   const wilaya=cleanDisplay(document.getElementById('selWilaya').value||'—');
+  const moughata=cleanDisplay(document.getElementById('selMoughata').value||'—');
   const ecole=cleanDisplay(document.getElementById('selEcole').value||'—');
+  const num=(r['Num']!=null?r['Num']:'—');
   function row(ic,k,v){return'<div class="rc-row"><span class="rc-k">'+ROW_ICONS[ic]+k+'</span><span class="rc-v">'+esc(v||'—')+'</span></div>';}
   box.className='rc show';
   box.innerHTML=
@@ -441,7 +490,9 @@ function renderConcours(r){
       '</div>'+
       (totalNum!=null?'<div class="rc-moybar"><div class="rc-moybar-fill" id="moybar" style="background:var(--ln)"></div></div>':'')+
       '<div class="rc-rows" style="padding-top:0">'+
+        row('num','الرقم',num)+
         row('wilaya','الولاية',wilaya)+
+        row('centre','المقاطعة',moughata)+
         row('etab','المدرسة',ecole)+
       '</div>'+
       '<div class="rc-foot"><img class="rc-foot-img rc-foot-light" alt="maurinote" src="'+RC_LOGO_LIGHT+'"><img class="rc-foot-img rc-foot-dark" alt="maurinote" src="'+RC_LOGO_DARK+'"></div>'+
@@ -464,6 +515,7 @@ const EMBLEM={
 };
 
 const ROW_ICONS={
+  num:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h16M4 15h16M10 3 8 21M16 3l-2 18"/></svg>',
   wilaya:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>',
   centre:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/><path d="M9 9v.01M9 12v.01M9 15v.01M9 18v.01"/></svg>',
   etab:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>',
