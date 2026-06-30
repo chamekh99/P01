@@ -201,7 +201,7 @@ body.concours{--ln:var(--t2);--ln-soft:var(--t2s);--ln-line:var(--t2l)}
 <div class="bg-layer"><div class="bg-orb orb-1"></div><div class="bg-orb orb-2"></div><div class="bg-orb orb-3"></div></div>
 <site-header></site-header>
 
-<section class="page-hero">
+<section class="page-hero" id="pageHero">
   <div class="wrap">
     <div class="back-row"><a class="back-link" href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg> الرجوع</a></div>
     <div style="text-align:center">
@@ -290,7 +290,7 @@ const DATA_DIR='data-concours25';
 
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 function hideAll(){document.getElementById('resultBox').classList.remove('show');document.getElementById('msgBox').classList.remove('show');}
-function backToSearch(){document.getElementById('finderBox').hidden=false;document.getElementById('backRow').hidden=true;hideAll();}
+function backToSearch(){document.getElementById('finderBox').hidden=false;document.getElementById('backRow').hidden=true;document.getElementById('pageHero').hidden=false;hideAll();window.scrollTo({top:0,behavior:'smooth'});}
 function cleanDisplay(s){return(s||'').replace(/ـ/g,'').replace(/\s+/g,' ').trim();}
 
 /* ════════ الفهرس: الولايات + كل المقاطعات بأعدادها ════════ */
@@ -429,6 +429,7 @@ function showStudent(i){const r=_list[i];if(r)renderConcours(r);}
 function renderConcours(r){
   hideAll();
   document.getElementById('finderBox').hidden=true;
+  document.getElementById('pageHero').hidden=true;
   document.getElementById('backRow').hidden=false;
   const box=document.getElementById('resultBox');
   box.className='rc show';
