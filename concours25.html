@@ -119,7 +119,7 @@ body.concours{--ln:var(--t2);--ln-soft:var(--t2s);--ln-line:var(--t2l)}
 
 .search-sec{padding:34px 0 60px}
 .finder{max-width:560px;margin:0 auto;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:26px 24px}
-.finder h3{font-size:1.1rem;font-weight:700;color:var(--ink);margin-bottom:5px;text-align:center}
+.finder h3{font-size:1.1rem;font-weight:700;color:var(--ink);margin-bottom:20px;text-align:center}
 .entry-row{display:flex;gap:10px;align-items:stretch}
 .input-wrap{flex:1;position:relative;display:flex;align-items:center}
 .input-wrap>svg{position:absolute;right:15px;width:18px;height:18px;color:var(--ink-3);pointer-events:none}
@@ -236,7 +236,7 @@ body.concours{--ln:var(--t2);--ln-soft:var(--t2s);--ln-line:var(--t2l)}
 .student-filter{font-family:inherit;font-size:.9rem;color:var(--ink);background:var(--panel-2);border:1.5px solid var(--line-2);border-radius:11px;padding:10px 14px;width:100%;transition:.2s}
 .student-filter:focus{outline:none;border-color:var(--ln);background:var(--panel);box-shadow:0 0 0 3px var(--ln-soft)}
 .student-filter::placeholder{color:var(--ink-3);font-weight:400}
-.student-list{max-height:270px;overflow-y:auto;border:1.5px solid var(--line-2);border-radius:11px;padding:4px}
+.student-list{border:1.5px solid var(--line-2);border-radius:11px;padding:4px}
 .student-item{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 12px;border-radius:8px;border:none;background:transparent;cursor:pointer;text-align:right;transition:.15s;font-family:inherit}
 .student-item:hover{background:var(--ln-soft)}
 .st-name{font-size:.88rem;font-weight:600;color:var(--ink);flex:1;min-width:0;word-break:break-word;text-align:right;line-height:1.4}
@@ -435,32 +435,31 @@ async function onMoughataChange(){
   }catch(e){fillSelect(selC,'تعذّر التحميل');fillSelect(selE,'تعذّر التحميل');}
 }
 
-/* اختيار المركز → بحث بالرقم (الأرقام رسمية وتتبع المركز لا المدرسة) */
+function numSort(a,b){return String(a.num||'').localeCompare(String(b.num||''),'en',{numeric:true});}
+
+/* اختيار المركز → قائمة الطلاب مرتبة بالرقم */
 function onCentreChange(){
   const c=document.getElementById('selCentre').value; if(!c)return;
-  document.getElementById('selEcole').selectedIndex=0;   // إلغاء مسار المدرسة
+  document.getElementById('selEcole').selectedIndex=0;
   document.getElementById('stepName').hidden=true;
   hideAll();
-  _list=_scope.filter(s=>s.centre===c);
+  _list=_scope.filter(s=>s.centre===c).sort(numSort);
   document.getElementById('stepNum').hidden=false;
   document.getElementById('studentFilter').value='';
   renderStudentList(_list);
 }
 
-/* اختيار المدرسة → قائمة منسدلة بالأسماء */
+/* اختيار المدرسة → نفس قائمة المركز مرتبة بالرقم */
 function onEcoleChange(){
   const e=document.getElementById('selEcole').value; if(!e)return;
-  document.getElementById('selCentre').selectedIndex=0;  // إلغاء مسار المركز
-  document.getElementById('stepNum').hidden=true;
+  document.getElementById('selCentre').selectedIndex=0;
+  document.getElementById('stepName').hidden=true;
   hideAll();
-  _list=_scope.filter(s=>s.ecole===e);
-  const selN=document.getElementById('selName');
-  fillSelect(selN,'اختر اسمك');
-  _list.forEach((s,i)=>{const o=document.createElement('option');o.value=i;o.textContent=cleanDisplay(s.nom||'—');selN.appendChild(o);});
-  document.getElementById('stepName').hidden=false;
+  _list=_scope.filter(s=>s.ecole===e).sort(numSort);
+  document.getElementById('stepNum').hidden=false;
+  document.getElementById('studentFilter').value='';
+  renderStudentList(_list);
 }
-
-function onNameChange(){const r=_list[+document.getElementById('selName').value];if(r)renderConcours(r);}
 
 function filterStudents(){
   const q=cleanDisplay(document.getElementById('studentFilter').value);
