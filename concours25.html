@@ -136,57 +136,22 @@ body.concours{--ln:var(--t2);--ln-soft:var(--t2s);--ln-line:var(--t2l)}
 .rc.show{display:block;animation:rcIn .25s ease}
 @keyframes rcIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .rc-card{background:var(--panel);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 12px 44px -20px rgba(16,42,35,.28)}
-.rc-st-pass .rc-card{border-color:var(--green-line);box-shadow:0 14px 54px -18px rgba(0,183,117,.5)}
-.rc-celebrate{display:none}
-.rc-st-pass .rc-celebrate{display:flex;align-items:center;justify-content:center;gap:9px;padding:14px 18px;font-weight:800;font-size:1.06rem;color:#fff;background:linear-gradient(105deg,#00b775,#0f9d6e);letter-spacing:.02em;animation:celebPop .45s cubic-bezier(.2,1.3,.4,1)}
-.rc-celebrate .ce-spark{font-size:1.15rem;animation:ceFloat 1.6s ease-in-out infinite}
-.rc-emblem{width:74px;height:74px;border-radius:50%;display:grid;place-items:center;margin:2px auto}
-.rc-emblem svg{width:40px;height:40px}
-.rc-st-pass .rc-emblem{background:linear-gradient(145deg,#00b775,#0f9d6e);color:#fff;box-shadow:0 10px 24px -6px rgba(0,183,117,.6);animation:emblemPop .5s cubic-bezier(.2,1.4,.4,1)}
-.rc-st-fail .rc-emblem{background:#fdecec;color:#dc2626;border:2px solid #f6c9c9}
-.rc-st-session .rc-emblem{background:#fef3e2;color:#b45309;border:2px solid #f6dcb0}
-.rc-st-absent .rc-emblem,.rc-st-cancel .rc-emblem{background:var(--panel-2);color:var(--ink-3);border:2px solid var(--line-2)}
-[data-theme="dark"] .rc-st-fail .rc-emblem{background:#3a1c1c;color:#f87171;border-color:#5e2a2a}
-[data-theme="dark"] .rc-st-session .rc-emblem{background:#3a2c12;color:#f59e0b;border-color:#5e4719}
-@keyframes emblemPop{from{transform:scale(.55);opacity:0}to{transform:scale(1);opacity:1}}
-@keyframes celebPop{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
-@keyframes ceFloat{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-3px) rotate(6deg)}}
 .rc-head{padding:24px 24px 20px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:11px;border-bottom:1px solid var(--line)}
 .rc-head-main{width:100%;min-width:0}
 .rc-name{font-size:1.34rem;font-weight:800;color:var(--ink);line-height:1.4;margin-bottom:5px}
-.rc-serie{font-size:.85rem;color:var(--ink-3);font-weight:500}
-.rc-decision{flex-shrink:0;display:inline-flex;align-items:center;gap:7px;font-size:.88rem;font-weight:700;padding:8px 16px;border-radius:10px;white-space:nowrap}
-.rc-st-pass .rc-decision{color:var(--green-deep);background:var(--green-soft);border:1px solid var(--green-line)}
-.rc-st-session .rc-decision{color:#b45309;background:#fef3e2;border:1px solid #f6dcb0}
-.rc-st-fail .rc-decision{color:#b91c1c;background:#fdecec;border:1px solid #f6c9c9}
-.rc-st-absent .rc-decision,.rc-st-cancel .rc-decision{color:var(--ink-2);background:var(--panel-2);border:1px solid var(--line-2)}
-[data-theme="dark"] .rc-st-session .rc-decision{color:#f59e0b;background:#3a2c12;border-color:#5e4719}
-[data-theme="dark"] .rc-st-fail .rc-decision{color:#f87171;background:#3a1c1c;border-color:#5e2a2a}
 .rc-rows{padding:6px 24px 12px}
 .rc-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:13px 0;border-bottom:1px solid var(--line)}
 .rc-row:last-child{border-bottom:none}
 .rc-row .rc-k{font-size:.86rem;color:var(--ink-3);font-weight:500;flex-shrink:0}
 .rc-row .rc-v{font-size:.95rem;color:var(--ink);font-weight:700;text-align:left}
 .rc-row.moy .rc-v{font-size:1.5rem;font-weight:800;letter-spacing:-.01em}
-.rc-st-pass .rc-row.moy .rc-v{color:var(--green-deep)}
-.rc-st-session .rc-row.moy .rc-v{color:#b45309}
-.rc-st-fail .rc-row.moy .rc-v{color:#b91c1c}
-.rc-st-absent .rc-row.moy .rc-v,.rc-st-cancel .rc-row.moy .rc-v{color:var(--ink-2)}
-[data-theme="dark"] .rc-st-session .rc-row.moy .rc-v{color:#f59e0b}
-[data-theme="dark"] .rc-st-fail .rc-row.moy .rc-v{color:#f87171}
 .rc-row.moy .rc-v small{font-size:.6rem;font-weight:600;color:var(--ink-3)}
 .rc-foot{padding:16px 24px;background:var(--panel-2);display:flex;align-items:center;justify-content:center}
 
 .rc-k{display:flex;align-items:center;gap:8px}
 .rc-k svg{width:16px;height:16px;color:var(--ink-3);flex-shrink:0}
-.rc-st-pass .rc-row.moy .rc-k svg{color:var(--green-deep)}
-
 .rc-moybar{height:7px;border-radius:999px;background:var(--line);overflow:hidden;margin:0 24px 4px}
 .rc-moybar-fill{height:100%;border-radius:999px;width:0;transition:width 1s cubic-bezier(.3,.9,.3,1)}
-.rc-st-pass .rc-moybar-fill{background:var(--green)}
-.rc-st-session .rc-moybar-fill{background:#d97706}
-.rc-st-fail .rc-moybar-fill{background:#dc2626}
-.rc-st-absent .rc-moybar-fill,.rc-st-cancel .rc-moybar-fill{background:var(--ink-3)}
 
 .rc-share{display:flex;gap:10px;max-width:560px;margin:14px auto 0}
 .share-btn{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:inherit;font-size:.9rem;font-weight:700;padding:13px 16px;border-radius:12px;cursor:pointer;transition:.2s;border:1.5px solid var(--line-2);background:var(--panel);color:var(--ink)}
@@ -432,13 +397,6 @@ function renderConcours(r){
 
 document.addEventListener('DOMContentLoaded',loadWilayas);
 
-const EMBLEM={
-  pass:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>',
-  fail:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><path d="M9 9h.01M15 9h.01"/></svg>',
-  session:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
-  absent:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg>',
-  cancel:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg>'
-};
 
 const ROW_ICONS={
   wilaya:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>',
@@ -462,20 +420,6 @@ function showMsg(type,title,html){
 }
 
 
-function celebrate(){
-  const colors=['#ffcc00','#fb275d','#00b775','#0f9d6e','#ffd84d'];
-  const cv=document.createElement('canvas');
-  cv.style.cssText='position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:300';
-  document.body.appendChild(cv);
-  const ctx=cv.getContext('2d');
-  function size(){cv.width=innerWidth*devicePixelRatio;cv.height=innerHeight*devicePixelRatio;ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);}
-  size();
-  const N=Math.min(170,Math.round(innerWidth/3)),parts=[];
-  for(let i=0;i<N;i++){parts.push({x:Math.random()*innerWidth,y:-20-Math.random()*innerHeight*0.4,r:6+Math.random()*7,c:colors[i%colors.length],vx:(Math.random()-0.5)*2.4,vy:3+Math.random()*4.5,rot:Math.random()*Math.PI,vr:(Math.random()-0.5)*0.32,shape:Math.random()<0.5?'rect':'circ'});}
-  const start=performance.now(),dur=2800;
-  function frame(t){const el=t-start;ctx.clearRect(0,0,innerWidth,innerHeight);parts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=0.045;p.rot+=p.vr;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.globalAlpha=Math.max(0,1-el/dur);ctx.fillStyle=p.c;if(p.shape==='rect'){ctx.fillRect(-p.r/2,-p.r/2,p.r,p.r*0.62);}else{ctx.beginPath();ctx.arc(0,0,p.r/2,0,7);ctx.fill();}ctx.restore();});if(el<dur){requestAnimationFrame(frame);}else{cv.remove();}}
-  requestAnimationFrame(frame);
-}
 
 function toast(msg){
   const t=document.getElementById('toast');
@@ -483,16 +427,6 @@ function toast(msg){
   clearTimeout(window._tt);window._tt=setTimeout(()=>t.classList.remove('show'),2200);
 }
 
-function copyLink(nodoss){
-  const url=location.origin+location.pathname+'?n='+encodeURIComponent(nodoss);
-  if(navigator.clipboard&&navigator.clipboard.writeText){
-    navigator.clipboard.writeText(url).then(()=>toast('تم نسخ الرابط')).catch(()=>toast('تعذّر النسخ'));
-  }else{
-    const ta=document.createElement('textarea');ta.value=url;document.body.appendChild(ta);ta.select();
-    try{document.execCommand('copy');toast('تم نسخ الرابط');}catch(e){toast('تعذّر النسخ');}
-    document.body.removeChild(ta);
-  }
-}
 
 async function shareImage(){
   const card=document.getElementById('rcCard');
