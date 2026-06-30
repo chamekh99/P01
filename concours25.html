@@ -291,7 +291,7 @@ const DATA_DIR='data-concours25';
 
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 function hideAll(){document.getElementById('resultBox').classList.remove('show');document.getElementById('msgBox').classList.remove('show');}
-function backToSearch(){document.getElementById('finderBox').hidden=false;document.getElementById('backRow').hidden=true;document.getElementById('pageHero').hidden=false;hideAll();window.scrollTo({top:0,behavior:'smooth'});}
+function backToSearch(){document.getElementById('finderBox').hidden=false;document.getElementById('backRow').hidden=true;document.getElementById('pageHero').hidden=false;hideAll();history.replaceState(null,'',location.pathname);window.scrollTo({top:0,behavior:'smooth'});}
 function cleanDisplay(s){return(s||'').replace(/ـ/g,'').replace(/\s+/g,' ').trim();}
 
 /* ════════ الفهرس: الولايات + كل المقاطعات بأعدادها ════════ */
@@ -316,6 +316,12 @@ async function loadIndex(){
       const o=document.createElement('option');o.value=w.wilaya;
       o.textContent=w.wilayaClean+' ('+w.count+')';selW.appendChild(o);});
     renderMoughataOptions(null);
+    const p=new URLSearchParams(location.search);
+    const pf=p.get('f'),pn=p.get('n');
+    if(pf&&pn){
+      const wEntry=WILAYAS.find(w=>w.id===pf);
+      if(wEntry){try{const sts=await fetchWilaya(wEntry.wilaya);const sr=sts.find(s=>String(s.num)===String(pn));if(sr){selW.value=wEntry.wilaya;renderConcours(sr);}}catch(e){}}
+    }
   }catch(e){fillSelect(selW,'تعذّر التحميل — حدّث الصفحة');fillSelect(selM,'تعذّر التحميل');}
 }
 
@@ -459,20 +465,17 @@ function renderConcours(r){
     '</div>'+
     '';
   box.scrollIntoView({behavior:'smooth',block:'center'});
-  window._shareData={nom:cleanDisplay(r.nom||''),total:totalStr,wilaya,moughata};
+  const wRaw=document.getElementById('selWilaya').value;
+  const fileId=_wilayaFiles[wRaw];
+  if(fileId&&r.num!=null) history.replaceState(null,'',location.pathname+'?f='+encodeURIComponent(fileId)+'&n='+encodeURIComponent(r.num));
 }
 
 async function shareResult(){
-  const d=window._shareData||{};
-  const text='نتيجتي في Concours 2025 🎓\n'
-    +'الاسم: '+d.nom+'\n'
-    +'النتيجة: '+d.total+' / 200\n'
-    +'الولاية: '+d.wilaya+' — '+d.moughata+'\n'
-    +'عبر maurinote.com';
+  const url=location.href;
   if(navigator.share){
-    try{await navigator.share({title:'نتيجة الكونكور 2025',text});}catch(e){}
+    try{await navigator.share({title:'نتيجتي في Concours 2025 — maurinote',url});}catch(e){}
   }else{
-    try{await navigator.clipboard.writeText(text);toast('تم نسخ النتيجة');}
+    try{await navigator.clipboard.writeText(url);toast('تم نسخ الرابط');}
     catch(e){toast('تعذّر النسخ');}
   }
 }
