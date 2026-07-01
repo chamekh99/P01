@@ -155,9 +155,10 @@ header.scrolled{background:color-mix(in srgb,var(--panel) 85%,transparent)}
 .lane[aria-disabled="true"] .lane-title{color:var(--ink-2)}
 .lane[aria-disabled="true"] .lane-abbr-box{color:var(--ink-3);background:var(--panel);border-color:var(--line)}
 .foot-col a[aria-disabled="true"]{color:var(--ink-3);opacity:.55;cursor:default;pointer-events:none}
-.lane.amber-comp{--ln:var(--amber);--ln-soft:var(--amber-soft);--ln-line:var(--amber-line)}
-.soon-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--amber);flex-shrink:0;animation:pulse-amber 2s infinite}
-@keyframes pulse-amber{0%{box-shadow:0 0 0 0 rgba(217,119,6,.5)}70%{box-shadow:0 0 0 8px rgba(217,119,6,0)}100%{box-shadow:0 0 0 0 rgba(217,119,6,0)}}
+.lane.grey-comp{--ln:var(--ink-3);--ln-soft:var(--beige-soft);--ln-line:var(--beige-line)}
+.lane-go.unavail{color:var(--ink-2);background:var(--beige-soft);border:1px solid var(--beige-line)}
+.soon-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--ink-3);flex-shrink:0;animation:pulse-grey 2s infinite}
+@keyframes pulse-grey{0%{box-shadow:0 0 0 0 rgba(138,149,143,.5)}70%{box-shadow:0 0 0 8px rgba(138,149,143,0)}100%{box-shadow:0 0 0 0 rgba(138,149,143,0)}}
 
 /* sections */
 section{padding:56px 0;position:relative}
@@ -316,20 +317,20 @@ footer{border-top:1px solid var(--line);padding:46px 0 28px;position:relative;z-
   <div class="wrap">
     <p class="lead-2 wish" style="color:var(--amber)">مسابقات 2026</p>
     <div class="lanes">
-      <a class="lane amber-comp" href="#notify">
+      <a class="lane grey-comp" href="#notify">
         <div class="lane-abbr-box">CONCOURS</div>
         <div class="lane-body"><div class="lane-title">مسابقة دخول السنة الأولى الإعدادية 2026</div></div>
-        <span class="lane-go soon"><span class="soon-dot"></span>أعلمني</span>
+        <span class="lane-go unavail"><span class="soon-dot"></span>أعلمني</span>
       </a>
-      <a class="lane amber-comp" href="#notify">
+      <a class="lane grey-comp" href="#notify">
         <div class="lane-abbr-box">BREVET</div>
         <div class="lane-body"><div class="lane-title">شهادة ختم الدروس الإعدادية 2026</div></div>
-        <span class="lane-go soon"><span class="soon-dot"></span>أعلمني</span>
+        <span class="lane-go unavail"><span class="soon-dot"></span>أعلمني</span>
       </a>
-      <a class="lane amber-comp" href="#notify">
+      <a class="lane grey-comp" href="#notify">
         <div class="lane-abbr-box">BAC</div>
         <div class="lane-body"><div class="lane-title">شهادة البكالوريا – الدورة العادية 2026</div></div>
-        <span class="lane-go soon"><span class="soon-dot"></span>أعلمني</span>
+        <span class="lane-go unavail"><span class="soon-dot"></span>أعلمني</span>
       </a>
     </div>
     <p class="lead-2 wish" style="margin-top:28px;color:var(--ink)">فريق maurinote يتمنى لكم التوفيق <span aria-hidden="true" style="font-size:1.2em">🌟</span></p>
