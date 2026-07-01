@@ -173,6 +173,7 @@ body.concours{--ln:var(--t2);--ln-soft:var(--t2s);--ln-line:var(--t2l)}
 .st-total{font-size:.82rem;font-weight:700;color:var(--ink);flex-shrink:0;direction:ltr;white-space:nowrap}
 .st-empty,.st-loading{padding:16px;text-align:center;color:var(--ink-3);font-size:.86rem;display:flex;align-items:center;justify-content:center;gap:8px}
 .st-spin{width:16px;height:16px;border:2px solid var(--line-2);border-top-color:var(--ln);border-radius:50%;animation:rcspin .7s linear infinite;flex-shrink:0}
+.finder-tag{display:block;text-align:center;font-size:.75rem;font-weight:700;color:var(--amber);background:var(--amber-soft);border:1px solid var(--amber-line);border-radius:20px;padding:3px 11px;margin:0 auto 18px;width:fit-content}
 .qs-wn{font-size:.78em;color:var(--ink-3);margin-right:6px}
 #qsSchoolList:empty,#qsStudentList:empty{border:none;padding:0;margin-top:0}
 .school-item{display:flex;align-items:center;justify-content:space-between;width:100%;text-align:right;padding:10px 14px;border-radius:8px;border:none;background:transparent;color:var(--ink);font:inherit;cursor:pointer;transition:background .15s}
@@ -221,30 +222,6 @@ body.concours{--ln:var(--t2);--ln-soft:var(--t2s);--ln-line:var(--t2l)}
 
 <section class="search-sec">
   <div class="wrap">
-    <!-- ── البحث السريع بالمدرسة ── -->
-    <div class="finder" id="quickFinder" style="margin-bottom:16px">
-      <h3>البحث السريع بالمدرسة</h3>
-      <div class="steps-wrap">
-        <div id="qsStep1">
-          <input type="text" id="qsSchoolInput" class="student-filter"
-                 placeholder="اكتب اسم مدرستك…" oninput="qsSearchSchool()" autocomplete="off">
-          <div class="student-list" id="qsSchoolList" style="margin-top:8px"></div>
-        </div>
-        <div id="qsStep2" hidden>
-          <div class="qs-school-badge">
-            <span class="qs-school-name" id="qsSelectedSchoolLabel"></span>
-            <button class="qs-change-btn" onclick="qsResetSchool()">← تغيير</button>
-          </div>
-          <input type="text" id="qsStudentInput" class="student-filter"
-                 placeholder="رقم الجلوس أو جزء من الاسم…"
-                 oninput="qsFilterStudents()" autocomplete="off">
-          <div class="student-list" id="qsStudentList" style="margin-top:8px"></div>
-        </div>
-      </div>
-    </div>
-
-    <p class="finder-sub" style="margin:0 auto 16px">— أو ابحث بالتسلسل التفصيلي —</p>
-
     <div class="finder" id="finderBox">
       <h3>ابحث عن نتيجتك</h3>
       <div class="steps-wrap">
@@ -294,6 +271,30 @@ body.concours{--ln:var(--t2);--ln-soft:var(--t2s);--ln-line:var(--t2l)}
         </div>
 
 
+      </div>
+    </div>
+
+    <!-- ── البحث السريع بالمدرسة (خيار بديل) ── -->
+    <p class="finder-sub" style="margin:16px auto">— أو ابحث مباشرةً باسم مدرستك —</p>
+    <div class="finder" id="quickFinder">
+      <div class="finder-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle;margin-left:4px"><path d="M13 2 4.5 13.5H11L9.5 22 20 10.5H13.5Z"/></svg>البحث السريع</div>
+      <p class="finder-sub" style="margin-top:0;margin-bottom:18px;color:var(--ink);font-weight:600">البحث باسم المدرسة</p>
+      <div class="steps-wrap">
+        <div id="qsStep1">
+          <input type="text" id="qsSchoolInput" class="student-filter"
+                 placeholder="اكتب اسم مدرستك…" oninput="qsSearchSchool()" autocomplete="off">
+          <div class="student-list" id="qsSchoolList" style="margin-top:8px"></div>
+        </div>
+        <div id="qsStep2" hidden>
+          <div class="qs-school-badge">
+            <span class="qs-school-name" id="qsSelectedSchoolLabel"></span>
+            <button class="qs-change-btn" onclick="qsResetSchool()">← تغيير</button>
+          </div>
+          <input type="text" id="qsStudentInput" class="student-filter"
+                 placeholder="رقم الجلوس أو جزء من الاسم…"
+                 oninput="qsFilterStudents()" autocomplete="off">
+          <div class="student-list" id="qsStudentList" style="margin-top:8px"></div>
+        </div>
       </div>
     </div>
 
@@ -567,6 +568,7 @@ function showStudent(i){const r=_list[i];if(r)renderConcours(r);}
 function renderConcours(r){
   hideAll();
   document.getElementById('finderBox').hidden=true;
+  document.getElementById('quickFinder').hidden=true;
   document.getElementById('pageHero').hidden=true;
   document.getElementById('backRow').hidden=false;
   const box=document.getElementById('resultBox');
