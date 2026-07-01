@@ -394,9 +394,11 @@ function onCentreChange(){
   document.getElementById('selEcole').selectedIndex=0;
   hideAll();
   _list=_scope.filter(s=>s.centre===c).sort(numSort);
-  document.getElementById('stepNum').hidden=false;
+  const sn=document.getElementById('stepNum');
+  sn.hidden=false;
   document.getElementById('studentFilter').value='';
   renderStudentList(_list);
+  setTimeout(()=>sn.scrollIntoView({behavior:'smooth',block:'start'}),50);
 }
 
 /* اختيار المدرسة → نفس قائمة المركز مرتبة بالرقم */
@@ -405,9 +407,11 @@ function onEcoleChange(){
   document.getElementById('selCentre').selectedIndex=0;
   hideAll();
   _list=_scope.filter(s=>s.ecole===e).sort(numSort);
-  document.getElementById('stepNum').hidden=false;
+  const sn=document.getElementById('stepNum');
+  sn.hidden=false;
   document.getElementById('studentFilter').value='';
   renderStudentList(_list);
+  setTimeout(()=>sn.scrollIntoView({behavior:'smooth',block:'start'}),50);
 }
 
 function filterStudents(){
