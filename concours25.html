@@ -173,6 +173,14 @@ body.concours{--ln:var(--t2);--ln-soft:var(--t2s);--ln-line:var(--t2l)}
 .st-total{font-size:.82rem;font-weight:700;color:var(--ink);flex-shrink:0;direction:ltr;white-space:nowrap}
 .st-empty,.st-loading{padding:16px;text-align:center;color:var(--ink-3);font-size:.86rem;display:flex;align-items:center;justify-content:center;gap:8px}
 .st-spin{width:16px;height:16px;border:2px solid var(--line-2);border-top-color:var(--ln);border-radius:50%;animation:rcspin .7s linear infinite;flex-shrink:0}
+.qs-wn{font-size:.78em;color:var(--ink-3);margin-right:6px}
+.school-item{display:flex;align-items:center;justify-content:space-between;width:100%;text-align:right;padding:10px 14px;border-radius:8px;border:none;background:transparent;color:var(--ink);font:inherit;cursor:pointer;transition:background .15s}
+.school-item:hover{background:var(--ln-soft)}
+.qs-school-badge{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--green-soft);border:1px solid var(--green-line);border-radius:10px;padding:10px 14px;margin-bottom:12px}
+[data-theme="dark"] .qs-school-badge{background:var(--panel-2);border-color:var(--line-2)}
+.qs-school-name{font-size:.9rem;font-weight:600;color:var(--ink);flex:1;min-width:0;word-break:break-word}
+.qs-change-btn{font:inherit;font-size:.82em;color:var(--green);background:none;border:none;cursor:pointer;padding:0;white-space:nowrap;flex-shrink:0}
+.qs-change-btn:hover{text-decoration:underline}
 
 /* ── تصميم بطاقة الكونكور ── */
 .cc-card{background:var(--panel);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 8px 32px -16px rgba(16,42,35,.2)}
@@ -212,6 +220,30 @@ body.concours{--ln:var(--t2);--ln-soft:var(--t2s);--ln-line:var(--t2l)}
 
 <section class="search-sec">
   <div class="wrap">
+    <!-- ── البحث السريع بالمدرسة ── -->
+    <div class="finder" id="quickFinder" style="margin-bottom:16px">
+      <h3>البحث السريع بالمدرسة</h3>
+      <div class="steps-wrap">
+        <div id="qsStep1">
+          <input type="text" id="qsSchoolInput" class="student-filter"
+                 placeholder="اكتب اسم مدرستك…" oninput="qsSearchSchool()" autocomplete="off">
+          <div class="student-list" id="qsSchoolList" style="margin-top:8px"></div>
+        </div>
+        <div id="qsStep2" hidden>
+          <div class="qs-school-badge">
+            <span class="qs-school-name" id="qsSelectedSchoolLabel"></span>
+            <button class="qs-change-btn" onclick="qsResetSchool()">← تغيير</button>
+          </div>
+          <input type="text" id="qsStudentInput" class="student-filter"
+                 placeholder="رقم الجلوس أو جزء من الاسم…"
+                 oninput="qsFilterStudents()" autocomplete="off">
+          <div class="student-list" id="qsStudentList" style="margin-top:8px"></div>
+        </div>
+      </div>
+    </div>
+
+    <p class="finder-sub" style="margin:0 auto 16px">— أو ابحث بالتسلسل التفصيلي —</p>
+
     <div class="finder" id="finderBox">
       <h3>ابحث عن نتيجتك</h3>
       <div class="steps-wrap">
@@ -276,6 +308,98 @@ body.concours{--ln:var(--t2);--ln-soft:var(--t2s);--ln-line:var(--t2l)}
 <div class="toast" id="toast"></div>
 
 <script>
+/* ════ البحث السريع بالمدرسة ════ */
+let _schools=[];
+let _qsMatches=[];
+let _qsStudents=[];
+let _qsSchool=null;
+
+async function loadSchools(){
+  try{
+    const r=await fetch(DATA_DIR+'/schools.json'); if(!r.ok)throw 0;
+    const d=await r.json(); _schools=d.schools||[];
+  }catch(e){/* silent — quick search stays empty */}
+}
+
+function qsSearchSchool(){
+  const q=cleanDisplay(document.getElementById('qsSchoolInput').value).trim();
+  const list=document.getElementById('qsSchoolList');
+  if(!q){list.innerHTML='';return;}
+  _qsMatches=_schools.filter(s=>cleanDisplay(s.e).includes(q)).slice(0,40);
+  if(!_qsMatches.length){list.innerHTML='<div class="st-empty">لا توجد مدرسة مطابقة</div>';return;}
+  const nameCount={};
+  _qsMatches.forEach(s=>{nameCount[s.e]=(nameCount[s.e]||0)+1;});
+  list.innerHTML='<div style="padding:4px">'+_qsMatches.map((s,i)=>{
+    const wLabel=nameCount[s.e]>1?' <span class="qs-wn">'+esc(qsWilayaName(s.w))+'</span>':'';
+    return '<button class="school-item" onclick="qsSelectSchool('+i+')">'+esc(cleanDisplay(s.e))+wLabel+'</button>';
+  }).join('')+'</div>';
+}
+
+function qsWilayaName(wid){const w=WILAYAS.find(x=>x.id===wid);return w?w.wilayaClean:wid;}
+
+async function qsSelectSchool(i){
+  const school=_qsMatches[i]; if(!school)return;
+  _qsSchool=school;
+  const wn=qsWilayaName(school.w);
+  document.getElementById('qsSelectedSchoolLabel').innerHTML=
+    esc(cleanDisplay(school.e))+'<span class="qs-wn">'+esc(wn)+'</span>';
+  document.getElementById('qsStep1').hidden=true;
+  document.getElementById('qsStep2').hidden=false;
+  document.getElementById('qsStudentInput').value='';
+  const slist=document.getElementById('qsStudentList');
+  slist.innerHTML='<div class="st-empty"><span class="st-spin"></span> جارٍ التحميل…</div>';
+  const wEntry=WILAYAS.find(w=>w.id===school.w);
+  if(!wEntry){slist.innerHTML='<div class="st-empty">تعذّر تحديد الولاية</div>';return;}
+  try{
+    const students=await fetchWilaya(wEntry.wilaya);
+    _qsStudents=students.filter(s=>s.ecole===school.e).sort(numSort);
+    qsRenderStudents(_qsStudents);
+  }catch(e){slist.innerHTML='<div class="st-empty">تعذّر تحميل البيانات</div>';}
+  setTimeout(()=>document.getElementById('qsStep2').scrollIntoView({behavior:'smooth',block:'start'}),50);
+}
+
+function qsResetSchool(){
+  _qsSchool=null; _qsStudents=[];
+  document.getElementById('qsStep2').hidden=true;
+  document.getElementById('qsStep1').hidden=false;
+  document.getElementById('qsSchoolInput').focus();
+  qsSearchSchool();
+}
+
+function qsFilterStudents(){
+  const q=cleanDisplay(document.getElementById('qsStudentInput').value).trim();
+  if(!q){qsRenderStudents(_qsStudents);return;}
+  qsRenderStudents(_qsStudents.filter(s=>
+    cleanDisplay(s.nom||'').includes(q)||
+    String(s.num||'').includes(q)||
+    shortNum(s.num).includes(q)
+  ));
+}
+
+function qsRenderStudents(rows){
+  const list=document.getElementById('qsStudentList');
+  if(!rows.length){list.innerHTML='<div class="st-empty">لا يوجد مطابق</div>';return;}
+  const idxMap=new Map(_qsStudents.map((s,i)=>[s,i]));
+  list.innerHTML=rows.map(s=>{
+    const i=idxMap.get(s)??0;
+    return '<button class="student-item" onclick="qsShowStudent('+i+')">'+
+      '<span class="st-num">'+esc(shortNum(s.num))+'</span>'+
+      '<span class="st-name">'+esc(cleanDisplay(s.nom||'—'))+'</span>'+
+      '<span class="st-total">'+(s.total!=null?s.total:'—')+'</span>'+
+    '</button>';
+  }).join('');
+}
+
+function qsShowStudent(i){
+  const r=_qsStudents[i]; if(!r)return;
+  const wEntry=WILAYAS.find(w=>w.id===_qsSchool.w);
+  if(wEntry)document.getElementById('selWilaya').value=wEntry.wilaya;
+  document.getElementById('quickFinder').hidden=true;
+  renderConcours(r);
+}
+</script>
+
+<script>
 function applyTheme(t){if(t==='dark')document.documentElement.setAttribute('data-theme','dark');else document.documentElement.removeAttribute('data-theme');}
 function toggleTheme(){const cur=document.documentElement.getAttribute('data-theme')==='dark'?'dark':'light';const next=cur==='dark'?'light':'dark';applyTheme(next);try{localStorage.setItem('theme',next);}catch(e){}}
 (function(){let t=null;try{t=localStorage.getItem('theme');}catch(e){}applyTheme(t==='dark'?'dark':'light');})();
@@ -291,7 +415,7 @@ const DATA_DIR='data-concours25';
 
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 function hideAll(){document.getElementById('resultBox').classList.remove('show');document.getElementById('msgBox').classList.remove('show');}
-function backToSearch(){document.getElementById('finderBox').hidden=false;document.getElementById('backRow').hidden=true;document.getElementById('pageHero').hidden=false;hideCS();hideFinders();history.replaceState(null,'',location.pathname);window.scrollTo({top:0,behavior:'smooth'});}
+function backToSearch(){document.getElementById('finderBox').hidden=false;document.getElementById('quickFinder').hidden=false;document.getElementById('backRow').hidden=true;document.getElementById('pageHero').hidden=false;hideCS();hideFinders();history.replaceState(null,'',location.pathname);window.scrollTo({top:0,behavior:'smooth'});}
 function cleanDisplay(s){return(s||'').replace(/ـ/g,'').replace(/\s+/g,' ').trim();}
 
 /* ════════ الفهرس: الولايات + كل المقاطعات بأعدادها ════════ */
@@ -316,6 +440,7 @@ async function loadIndex(){
       const o=document.createElement('option');o.value=w.wilaya;
       o.textContent=w.wilayaClean+' ('+w.count+')';selW.appendChild(o);});
     renderMoughataOptions(null);
+    loadSchools();
     const p=new URLSearchParams(location.search);
     const pf=p.get('f'),pn=p.get('n');
     if(pf&&pn){
